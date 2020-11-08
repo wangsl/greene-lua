@@ -38,7 +38,7 @@ local function setup_parameters(args)
 
       greeneGPU.setup_parameters{ gpus = greeneCommon.gpus,
 				  cpus = n_cpus_per_node,
-				  memory = job_desc.pn_min_memory/1024,
+				  memory = job_desc.pn_min_memory/1024.0,
 				  time_limit = job_desc.time_limit,
 				  gpu_type = greeneCommon.gpu_type }
       
