@@ -42,16 +42,22 @@ local function setup_parameters(args)
 				  time_limit = job_desc.time_limit,
 				  gpu_type = greeneCommon.gpu_type }
       
+      -- if job_desc.bitflags == 0 then job_desc.bitflags = slurm.GRES_ENFORCE_BIND end
       
-      if job_desc.bitflags == 0 then job_desc.bitflags = slurm.GRES_ENFORCE_BIND end
-
       if job_desc.partition == nil then
 	 local partitions = greeneGPU.valid_partitions()
-	 if partitions ~= nil then
-	    job_desc.partition = partitions
-	 end
+	 if partitions ~= nil then job_desc.partition = partitions end
       end
    end
+end
+
+local function setup_is_valid()
+   
+   if greeneCommon.is_gpu_job() then
+      if not greeneGPU.setup_is_valid() then return false end
+   end
+   
+   return true
 end
 
 local function print_job_desc()
@@ -86,6 +92,7 @@ local function print_job_desc()
    if job_desc.partition ~= nil then slurm_log("partitions: %s", job_desc.partition) end
    
    if job_desc.gres ~= nil then slurm_log("gres: %s", job_desc.gres) end
+   if job_desc.gres_bind ~= nil then slurm_log("gres_bind: %s", job_desc.gres_bind) end
 
    if job_desc.features ~= nil then slurm_log("features: %s", job_desc.features) end
 
@@ -148,6 +155,7 @@ end
 -- functions
 greeneJob.setup_parameters = setup_parameters
 greeneJob.print_job_desc = print_job_desc
+greeneJob.setup_is_valid = setup_is_valid
 
 slurm_log("To load greeneJob.lua")
 

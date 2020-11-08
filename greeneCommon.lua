@@ -66,15 +66,17 @@ local function netid()
 end
 
 local function setup_parameters(args)
-   job_desc = args.job_desc 
+   job_desc = args.job_desc
    if job_desc.gres ~= nil then
       gres_for_gpu(job_desc.gres)
-      ---------------------------------------------
-      --|| these 2 data have to be assinged here ||
-      ---------------------------------------------
-      greeneCommon.gpus = gpus
-      greeneCommon.gpu_type = gpu_type
+   else
+      gpu_type = nil
+      gpus = 0
    end
+
+   greeneCommon.job_desc = job_desc
+   greeneCommon.gpus = gpus
+   greeneCommon.gpu_type = gpu_type
 end
 
 -- functions

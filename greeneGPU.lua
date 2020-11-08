@@ -3,6 +3,7 @@
 local greeneGPU = { }
 
 local greeneUtils = require "greeneUtils"
+local greeneCommon = require "greeneCommon"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -15,6 +16,8 @@ local gpu_type = nil
 local time_limit = 0
 
 local available_gpu_types = { "v100", "rtx8000" }
+
+local partitions = { "v100", "rtx8000" }
 
 local partition_configures = {
    
@@ -33,15 +36,13 @@ local partition_configures = {
    }
 }
 
-local partitions = { "rtx8000", "v100" }
-
 local function gpu_type_is_valid()
    if gpu_type == nil then return true end
    
    if greeneUtils.in_table(available_gpu_types, gpu_type) then
       return true
    else
-      user_log("GPU type '%s' is invalid", gpu_type)
+      user_log("*** Error: GPU type '%s' is invalid", gpu_type)
       return false
    end
 end
@@ -50,7 +51,7 @@ local function number_of_cpus_is_ge_than_number_of_gpus()
    if cpus >= gpus then
       return true
    else
-      user_log("GPU number %d is bigger than CPU number %d", gpus, cpus)
+      user_log("*** Error: GPU number %d is bigger than CPU number %d", gpus, cpus)
       return false
    end
 end
@@ -91,6 +92,32 @@ local function valid_partitions()
    return partitions_
 end
 
+local function partitions_are_valid()
+   local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
+   local part_name = nil
+   for _, part_name in pairs(partitions) do
+      if not fit_into_partition(part_name) then
+	 user_log("*** Error partition '%s' is not valid for this job", part_name)
+	 return false
+      end
+   end
+   return true
+end
+
+local function setup_is_valid()
+   if not gpu_type_is_valid() then return false end
+   if not number_of_cpus_is_ge_than_number_of_gpus() then return false end
+   if not partitions_are_valid() then return false end
+
+   --[[
+   if greeneCommon.job_desc.bitflags ~= slurm.GRES_ENFORCE_BIND then
+      user_log("*** Error bitflags %d is not %d", greeneCommon.job_desc.bitflags, slurm.GRES_ENFORCE_BIND)
+   end
+   --]]
+   
+   return true
+end
+
 local function setup_parameters(args)
    gpus = args.gpus 
    cpus = args.cpus 
@@ -101,8 +128,8 @@ end
 
 -- functions
 greeneGPU.setup_parameters = setup_parameters
-greeneGPU.gpu_type_is_valid = gpu_type_is_valid
 greeneGPU.valid_partitions = valid_partitions
+greeneGPU.setup_is_valid = setup_is_valid
 
 slurm_log("To load greeneGPU.lua")
 
