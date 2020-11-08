@@ -107,7 +107,6 @@ local function setup_parameters(args)
 end
 
 -- functions
-
 greeneCPU.setup_parameters = setup_parameters
 greeneCPU.valid_partitions = valid_partitions
 greeneCPU.setup_is_valid = setup_is_valid

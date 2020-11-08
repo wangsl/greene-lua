@@ -3,8 +3,10 @@
 local greeneCommon = { }
 
 local greeneUtils = require "greeneUtils"
+local greeneSpecialUsers = require "greeneSpecialUsers"
 
 local slurm_log = greeneUtils.slurm_log
+local user_log = greeneUtils.user_log
 
 local job_desc = nil
 
@@ -65,6 +67,16 @@ local function netid()
    return job_desc.user_name
 end
 
+local function user_is_blocked(netid)
+   local blocked_users = greeneSpecialUsers.blocked_users
+   if #blocked_users > 0 and greeneUtils.in_table(blocked_users, netid) then
+      slurm_log("user %s is blocked to submit jobs", netid)
+      user_log("*** Error: user '%s' is not allowed to submit jobs now, please contact hpc@nyu.edu for help", netid)
+      return true
+   end
+   return false
+end
+
 local function setup_parameters(args)
    job_desc = args.job_desc
    if job_desc.gres ~= nil then
@@ -84,6 +96,8 @@ greeneCommon.setup_parameters = setup_parameters
 greeneCommon.netid = netid
 greeneCommon.is_interactive_job = is_interactive_job
 greeneCommon.is_gpu_job = is_gpu_job
+
+greeneCommon.user_is_blocked = user_is_blocked
 
 slurm_log("To load greeneCommon.lua")
 

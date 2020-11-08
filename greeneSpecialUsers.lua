@@ -6,11 +6,15 @@ local greeneUtils = require "greeneUtils"
 
 local slurm_log = greeneUtils.slurm_log
 
-local blocked_netids = { }
+--local blocked_netids = { }
 
 -- data
 
-greeneSpecialUsers.blocked_netids = blocked_netids
+greeneSpecialUsers.blocked_users = { }
+
+greeneSpecialUsers.cpuplus_users = { }
+ 
+greeneSpecialUsers.gpuplus_users = { }
 
 slurm_log("To load greeneSpeicalUsers.lua")
 

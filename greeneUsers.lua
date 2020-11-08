@@ -12,7 +12,7 @@ local users = { }
 users["0"] = "root"
 users["10015"] = "wang"
 
-local blocked_netids = greeneSpecialUsers.blocked_netids
+--local blocked_netids = greeneSpecialUsers.blocked_netids
 
 local netid = nil
 
@@ -37,26 +37,12 @@ local function uid_is_valid(uid)
    return true
 end
 
-local function netid_is_blocked(uid)
-   if not uid_is_valid(uid) then return true end
-   if #blocked_netids > 0 and greeneUtils.in_table(blocked_netids, netid) then
-      slurm_log("user %s is blocked to submit jobs", netid)
-      user_log("Sorry, you are not allowed to submit jobs now, please contact hpc@nyu.edu for help")
-      return true
-   end
-   return false
-end
-
-local function nyu_netid()
-   return netid
-end
-
 -- functions
-
-greeneUsers.nyu_netid = nyu_netid
-greeneUsers.netid_is_blocked = netid_is_blocked
 
 slurm_log("To load greeneUsers.lua")
 
 return greeneUsers
 
+--[[
+   to check CGSB users
+--]]

@@ -3,11 +3,9 @@
 local greene = { }
 
 local greeneUtils = require "greeneUtils"
-local greeneUsers = require "greeneUsers"
+local greeneCommon = require "greeneCommon"
 local greeneJob = require "greeneJob"
 local time = require "time"
-
--- local greeneCommon = require "greeneCommon"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -26,7 +24,7 @@ local function job_submission(job_desc, part_list, submit_uid)
 
    local time_start = time.getMicroseconds()
    
-   if greeneUsers.netid_is_blocked(submit_uid) then return slurm.ERROR end
+   if greeneCommon.user_is_blocked(job_desc.user_name) then return slurm.ERROR end
    
    if job_desc.user_name == "wang" or job_desc.user_name == "sw77" then
       greeneJob.setup_parameters{job_desc = job_desc}
