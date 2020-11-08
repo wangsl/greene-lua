@@ -30,7 +30,7 @@ local function job_submission(job_desc, part_list, submit_uid)
 
    greeneJob.setup_parameters{job_desc = job_desc}
 
-   greeneJob.print_job_desc()
+   --greeneJob.print_job_desc()
 
    --[[
    greeneJob.setup_parameters{job_desc = job_desc}

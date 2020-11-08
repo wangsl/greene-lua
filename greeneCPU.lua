@@ -8,7 +8,7 @@ local slurm_log = greeneUtils.slurm_log
 
 -- functions
 
-slurm_log("To load greeneCPU")
+slurm_log("To load greeneCPU.lua")
 
 return greeneCPU
 

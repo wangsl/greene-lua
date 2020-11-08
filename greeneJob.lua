@@ -4,6 +4,8 @@ local greeneJob = { }
 
 local greeneUtils = require "greeneUtils"
 local greeneCommon = require "greeneCommon"
+local greeneCPU = require "greeneCPU"
+local greeneGPU = require "greeneGPU"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -17,6 +19,7 @@ local uint64_NO_VAL = greeneUtils.uint64_NO_VAL
 local bigIntNumber = greeneUtils.bigIntNumber
 
 local job_desc = nil
+local n_cpus_per_node = nil
 
 local function memory_is_specified(mem)
    if mem == nil or mem > bigIntNumber then
@@ -28,8 +31,27 @@ end
 
 local function setup_parameters(args)
    job_desc = args.job_desc 
-   greeneCommon.setup_parameters{job_desc = job_desc}
    setup_default_compute_resources()
+   greeneCommon.setup_parameters{job_desc = job_desc}
+
+   if greeneCommon.is_gpu_job() then
+
+      greeneGPU.setup_parameters{ gpus = greeneCommon.gpus,
+				  cpus = n_cpus_per_node,
+				  memory = job_desc.pn_min_memory/1024,
+				  time_limit = job_desc.time_limit,
+				  gpu_type = greeneCommon.gpu_type }
+      
+      
+      if job_desc.bitflags == 0 then job_desc.bitflags = slurm.GRES_ENFORCE_BIND end
+
+      if job_desc.partition == nil then
+	 local partitions = greeneGPU.valid_partitions()
+	 if partitions ~= nil then
+	    job_desc.partition = partitions
+	 end
+      end
+   end
 end
 
 local function print_job_desc()
@@ -43,7 +65,7 @@ local function print_job_desc()
    slurm_log("ntasks_per_socket: %d", job_desc.ntasks_per_socket)
    slurm_log("num_tasks = %d", job_desc.num_tasks)
    slurm_log("pn_min_cpus: %d", job_desc.pn_min_cpus)
-   --slurm_log("pn_min_memory: %d", job_desc.pn_min_memory)
+   slurm_log("pn_min_memory: %d", job_desc.pn_min_memory)
    slurm_log("cpus_per_task: %d", job_desc.cpus_per_task)
 
    slurm_log("min_nodes: %d", job_desc.min_nodes)
@@ -84,13 +106,6 @@ local function print_job_desc()
       slurm_log("sbatch script with arguments: %s", argv)
    end
 
-   if job_desc.mail_type ~= 0 and job_desc.mail_user == nil then
-      local netid = job_desc.user_name
-      if string.find(netid, "^%a+%d+$") then
-	 job_desc.mail_user = netid .. "@nyu.edu"
-      end
-   end
-
    if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
 
    return
@@ -116,6 +131,8 @@ function setup_default_compute_resources()
    n_cpus_per_node = job_desc.ntasks_per_node * job_desc.cpus_per_task
    
    if job_desc.min_nodes == uint32_NO_VAL then job_desc.min_nodes = 1 end
+
+   if job_desc.requeue ~= 1 then job_desc.requeue = 0 end
    
    if not memory_is_specified(job_desc.pn_min_memory) then
       if memory_is_specified(job_desc.min_mem_per_cpu) then
@@ -129,7 +146,6 @@ end
 -- data
 
 -- functions
-
 greeneJob.setup_parameters = setup_parameters
 greeneJob.print_job_desc = print_job_desc
 

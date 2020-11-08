@@ -61,21 +61,25 @@ local function is_gpu_job()
    end
 end
 
+local function netid()
+   return job_desc.user_name
+end
+
 local function setup_parameters(args)
    job_desc = args.job_desc 
    if job_desc.gres ~= nil then
       gres_for_gpu(job_desc.gres)
-      slurm_log('** gpu type: %s %d', gpu_type, gpus)
+      ---------------------------------------------
+      --|| these 2 data have to be assinged here ||
+      ---------------------------------------------
+      greeneCommon.gpus = gpus
+      greeneCommon.gpu_type = gpu_type
    end
 end
 
--- data
-greeneCommon.gpu_type = gpu_type
-greeneCommon.gpus = gpus
-
 -- functions
-
 greeneCommon.setup_parameters = setup_parameters
+greeneCommon.netid = netid
 greeneCommon.is_interactive_job = is_interactive_job
 greeneCommon.is_gpu_job = is_gpu_job
 
