@@ -7,7 +7,7 @@ local greeneUsers = require "greeneUsers"
 local greeneJob = require "greeneJob"
 local time = require "time"
 
-local greeneCommon = require "greeneCommon"
+-- local greeneCommon = require "greeneCommon"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -44,8 +44,8 @@ local function job_submission(job_desc, part_list, submit_uid)
 
    local time_end = time.getMicroseconds()
 
-    slurm_log("Lua job submission plugin time %.0f usec for %s",
-	      (time_end - time_start)*10^6, job_desc.user_name)
+   slurm_log("Lua job submission plugin time %.0f usec for %s",
+	    (time_end - time_start)*10^6, job_desc.user_name)
 
    --[[
    slurm_log("Lua job submission plugin time %.0f usec for %s",

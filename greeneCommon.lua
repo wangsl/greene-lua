@@ -63,10 +63,9 @@ end
 
 local function setup_parameters(args)
    job_desc = args.job_desc 
-   slurm_log(args.job_desc.gres)
    if job_desc.gres ~= nil then
       gres_for_gpu(job_desc.gres)
-      slurm_log('gpu type: %s %d', gpu_type, gpus)
+      slurm_log('** gpu type: %s %d', gpu_type, gpus)
    end
 end
 
@@ -80,7 +79,7 @@ greeneCommon.setup_parameters = setup_parameters
 greeneCommon.is_interactive_job = is_interactive_job
 greeneCommon.is_gpu_job = is_gpu_job
 
-slurm_log("To load greeneCommon")
+slurm_log("To load greeneCommon.lua")
 
 return greeneCommon
 

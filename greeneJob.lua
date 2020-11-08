@@ -33,7 +33,7 @@ local function setup_parameters(args)
 end
 
 local function print_job_desc()
-
+   
    slurm_log(" === Print job desc ===")
 
    --greeneUtils.print_NO_VALs()
@@ -92,7 +92,7 @@ local function print_job_desc()
    end
 
    if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
-   
+
    return
 end
 
