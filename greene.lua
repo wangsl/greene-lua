@@ -30,10 +30,10 @@ local function job_submission(job_desc, part_list, submit_uid)
    
    if job_desc.user_name == "wang" or job_desc.user_name == "sw77" then
       greeneJob.setup_parameters{job_desc = job_desc}
+
+      greeneJob.print_job_desc()
       
       if not greeneJob.setup_is_valid() then return slurm.ERROR end
-      
-      greeneJob.print_job_desc()
    end
 
    --[[

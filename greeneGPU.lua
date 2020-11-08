@@ -8,7 +8,6 @@ local greeneCommon = require "greeneCommon"
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
 
-
 local gpus = 0
 local cpus = 0
 local memory = 0
@@ -17,9 +16,10 @@ local time_limit = 0
 
 local available_gpu_types = { "v100", "rtx8000" }
 
-local partitions = { "v100", "rtx8000" }
+-- this is the order to assign partitions
+local partitions = { "rtx8000", "v100" }
 
-local partition_configures = {
+local partition_configurations = {
    
    v100 = { gpu = "v100",
 	    { gpus = 1, max_cpus = 20, max_memory = 100 },
@@ -57,23 +57,20 @@ local function number_of_cpus_is_ge_than_number_of_gpus()
 end
 
 local function fit_into_partition(part_name)
-   local partition_conf = partition_configures[part_name]
-   if partition_conf ~= nil then
-      if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
+   local partition_conf = partition_configurations[part_name]
 
-      if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
-	 return false
-      end
-      
-      if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then
-	 return false
-      end
-      
-      local conf = partition_conf[gpus]
-      if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then
-	 return true
-      end
+   if partition_conf == nil then return false end
+   
+   if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
+   
+   if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
+      return false
    end
+   
+   if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
+   
+   local conf = partition_conf[gpus]
+   if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then return true end
    
    return false
 end
@@ -135,4 +132,9 @@ slurm_log("To load greeneGPU.lua")
 
 return greeneGPU
 
+--[[
+To do list
 
+job_desc.bitflags to bind CPUs and GPUs
+
+--]]

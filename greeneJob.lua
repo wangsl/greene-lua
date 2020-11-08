@@ -34,6 +34,7 @@ local function setup_parameters(args)
    setup_default_compute_resources()
    greeneCommon.setup_parameters{job_desc = job_desc}
 
+   -- GPU job
    if greeneCommon.is_gpu_job() then
 
       greeneGPU.setup_parameters{ gpus = greeneCommon.gpus,
@@ -48,15 +49,26 @@ local function setup_parameters(args)
 	 local partitions = greeneGPU.valid_partitions()
 	 if partitions ~= nil then job_desc.partition = partitions end
       end
+      
+   else -- CPU only jobs
+      greeneCPU.setup_parameters{ cpus = n_cpus_per_node,
+				  memory = job_desc.pn_min_memory/1024.0,
+				  nodes = job_desc.min_nodes,
+				  time_limit = job_desc.time_limit }
+      
+      if job_desc.partition == nil then
+	 local partitions = greeneCPU.valid_partitions()
+	 if partitions ~= nil then job_desc.partition = partitions end
+      end
    end
 end
 
 local function setup_is_valid()
-   
    if greeneCommon.is_gpu_job() then
       if not greeneGPU.setup_is_valid() then return false end
+   else
+      if not greeneCPU.setup_is_valid() then return false end
    end
-   
    return true
 end
 
