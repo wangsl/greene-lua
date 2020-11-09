@@ -6,6 +6,7 @@ local greeneUtils = require "greeneUtils"
 local greeneCommon = require "greeneCommon"
 local greeneCPU = require "greeneCPU"
 local greeneGPU = require "greeneGPU"
+local greeneQoS = require "greeneQoS"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -61,6 +62,12 @@ local function setup_parameters(args)
 	 if partitions ~= nil then job_desc.partition = partitions end
       end
    end
+
+   greeneQoS.setup_parameters{ time_limit = job_desc.time_limit }
+   if job_desc.qos == nil then
+      local qos = greeneQoS.valid_qos()
+      if qos ~= nil then job_desc.qos = qos end
+   end
 end
 
 local function setup_is_valid()
@@ -69,6 +76,9 @@ local function setup_is_valid()
    else
       if not greeneCPU.setup_is_valid() then return false end
    end
+
+   if not greeneQoS.qos_is_valid() then return false end
+   
    return true
 end
 
@@ -97,7 +107,7 @@ local function print_job_desc()
 
    if job_desc.account ~= nil then slurm_log("account: %s", job_desc.account) end
    
-   if job_desc.qos ~= nil then slurm_log("job_desc.qos: %s", job_desc.qos) end
+   if job_desc.qos ~= nil then slurm_log("qos: %s", job_desc.qos) end
    
    if job_desc.mail_user ~= nil then slurm_log("mail_user: %s", job_desc.mail_user) end
    

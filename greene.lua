@@ -25,7 +25,9 @@ local function job_submission(job_desc, part_list, submit_uid)
    local time_start = time.getMicroseconds()
    
    if greeneCommon.user_is_blocked(job_desc.user_name) then return slurm.ERROR end
-   
+
+   if job_desc.script ~= nil then slurm_log("script:\n%s", job_desc.script) end
+
    if job_desc.user_name == "wang" or job_desc.user_name == "sw77" then
       greeneJob.setup_parameters{job_desc = job_desc}
 
