@@ -12,7 +12,6 @@ local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
 
 -- constants
-
 local uint16_NO_VAL = greeneUtils.uint16_NO_VAL
 local uint32_NO_VAL = greeneUtils.uint32_NO_VAL
 local uint64_NO_VAL = greeneUtils.uint64_NO_VAL
@@ -31,20 +30,20 @@ local function memory_is_specified(mem)
 end
 
 local function setup_parameters(args)
-   job_desc = args.job_desc 
+   job_desc = args.job_desc
+   
    setup_default_compute_resources()
+
    greeneCommon.setup_parameters{job_desc = job_desc}
 
    -- GPU job
    if greeneCommon.is_gpu_job() then
-
+      
       greeneGPU.setup_parameters{ gpus = greeneCommon.gpus,
 				  cpus = n_cpus_per_node,
 				  memory = job_desc.pn_min_memory/1024.0,
 				  time_limit = job_desc.time_limit,
 				  gpu_type = greeneCommon.gpu_type }
-      
-      -- if job_desc.bitflags == 0 then job_desc.bitflags = slurm.GRES_ENFORCE_BIND end
       
       if job_desc.partition == nil then
 	 local partitions = greeneGPU.valid_partitions()
@@ -68,9 +67,11 @@ local function setup_parameters(args)
       local qos = greeneQoS.valid_qos()
       if qos ~= nil then job_desc.qos = qos end
    end
+   
 end
 
 local function setup_is_valid()
+
    if greeneCommon.is_gpu_job() then
       if not greeneGPU.setup_is_valid() then return false end
    else
@@ -78,9 +79,15 @@ local function setup_is_valid()
    end
 
    if not greeneQoS.qos_is_valid() then return false end
+
+   -- check reservations
+
+   -- check accounts
    
    return true
 end
+
+-- test function
 
 local function print_job_desc()
    
