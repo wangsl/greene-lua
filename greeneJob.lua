@@ -30,6 +30,7 @@ local function memory_is_specified(mem)
 end
 
 local function setup_parameters(args)
+   
    job_desc = args.job_desc
    
    setup_default_compute_resources()

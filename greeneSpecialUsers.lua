@@ -6,8 +6,6 @@ local greeneUtils = require "greeneUtils"
 
 local slurm_log = greeneUtils.slurm_log
 
---local blocked_netids = { }
-
 -- data
 
 greeneSpecialUsers.blocked_users = { }

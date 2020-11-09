@@ -17,36 +17,28 @@ local interative_time_limit = greeneUtils.hours_to_mins(4)
 
 local time_limit = 0
 
-local qos_interact_name = "interact"
-
-local QoSs = { qos_interact_name,
+local QoSs = { "interact",
 	       "cpuplus", "cpu48", "cpu168",
 	       "gpuplus", "gpu48", "gpu168" }
-	       
+
 local qos_configurations = {
 
-   interact = { cpu = true, gpu = true,
-		time_min = 0, time_max = interative_time_limit },
+   interact = { interative = true, time_min = 0, time_max = interative_time_limit },
    
-   cpu48 = { cpu = true, gpu = false,
-	     time_min = 0, time_max = two_days },
-   cpu168 = { cpu = true, gpu = false,
-	      time_min = two_days, time_max = seven_days },
+   cpu48 = { gpu = false, time_min = 0, time_max = two_days },
+   cpu168 = { gpu = false, time_min = two_days, time_max = seven_days },
    
-   gpu48 = { cpu = false, gpu = true,
-	     time_min = 0, time_max = two_days },
-   gpu168 = { cpu = false, gpu = true,
-	      time_min = two_days, time_max = seven_days },
+   gpu48 = { gpu = true, time_min = 0, time_max = two_days },
+   gpu168 = { gpu = true, time_min = two_days, time_max = seven_days },
    
    -- special QoS with user access control
    
-   cpuplus = { cpu = true, gpu = false,
-	       time_min = 0, time_max = seven_days,
+   cpuplus = { gpu = false, time_min = 0, time_max = seven_days,
 	       users = greeneSpecialUsers.cpuplus_users },
-   gpuplus = { cpu = false, gpu = true,
+
+   gpuplus = { gpu = true,
 	       time_min = 0, time_max = seven_days,
 	       users = greeneSpecialUsers.gpuplus_users },
-   
    --[[
       cpu365 = { time_min = seven_days, time_max = unlimited_time,
       users = princeStakeholders.users_with_unlimited_wall_time
@@ -54,71 +46,24 @@ local qos_configurations = {
    --]]
 }
 
--- this function is to choose QoS
-
 local function fit_into_qos(qos_name)
    
    local qos = qos_configurations[qos_name]
    
    if qos == nil then return false end
-   
-   local cpu = nil
-   local gpu = nil
-   
-   if(greeneCommon.is_interactive_job() and time_limit <= interative_time_limit) then
-      cpu = true
-      gpu = true
-   elseif(greeneCommon.is_gpu_job()) then
-      cpu = false
-      gpu = true
-   else
-      cpu = true
-      gpu = false
-   end
+
+   if qos.interative ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
+
+   if qos.gpu ~= nil and qos.gpu ~= greeneCommon.is_gpu_job() then return false end
    
    if (qos.users ~= nil and greeneUtils.in_table(qos.users, greeneCommon.netid())) or qos.users == nil then
-      if cpu == qos.cpu and
-	 gpu == qos.gpu and
-	 time_limit > qos.time_min and
-         time_limit <= qos.time_max then
+      if time_limit > qos.time_min and time_limit <= qos.time_max then
 	 return true
       end
    end
 	 
    return false
 end
-
--- this function is to validate QoS
-
-local function fit_into_qos_2(qos_name)
-
-   if qos_name == qos_interact_name then
-      if fit_into_qos(qos_name) then return true end
-   end
-   
-   local qos = qos_configurations[qos_name]
-   local cpu = nil
-   local gpu = nil
-   
-   if(greeneCommon.is_gpu_job()) then
-      cpu = false
-      gpu = true
-   else
-      cpu = true
-      gpu = false
-   end
-
-   if (qos.users ~= nil and greeneUtils.in_table(qos.users, greeneCommon.netid())) or qos.users == nil then
-      if cpu == qos.cpu and
-	 gpu == qos.gpu and
-	 time_limit > qos.time_min and
-         time_limit <= qos.time_max then
-	 return true
-      end
-   end
-	 
-   return false
-end  
 
 local function valid_qos()
    for _, qos_name in pairs(QoSs) do
@@ -141,7 +86,7 @@ local function qos_is_valid()
       return false
    end
 
-   if not fit_into_qos_2(qos) then
+   if not fit_into_qos(qos) then
       user_log("*** Error QoS '%s' does not fit this job", qos)
       return false
    end
