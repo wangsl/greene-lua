@@ -12,8 +12,6 @@ local users = { }
 users["0"] = "root"
 users["10015"] = "wang"
 
---local blocked_netids = greeneSpecialUsers.blocked_netids
-
 local netid = nil
 
 local function uid_to_netid(uid)

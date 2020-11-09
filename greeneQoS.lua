@@ -107,8 +107,4 @@ slurm_log("To load greeneQoS.lua")
 
 return greeneQoS
 
---[[
-   To reimplement qos_is_valid in a more smart way
---]]
-
 
