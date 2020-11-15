@@ -46,25 +46,30 @@ local partition_configurations = {
    }
 }
 
-local single_partition_configurations = {
+local special_partition_configurations = {
    
    cs =  { min_cpus = 48, max_cpus = 48,
 	   max_nodes = 524,
 	   min_memory = 0, max_memory = 180
+   },
+
+   cm =  { min_cpus = 48, max_cpus = 48,
+	   max_nodes = 40,
+	   min_memory = 180.001, max_memory = 300
    }
 }
 
 local function fit_into_single_partition(part_name)
-   local partition_conf = single_partition_configurations[part_name]
-
+   local partition_conf = special_partition_configurations[part_name]
+   
    if partition_conf == nil then return false end
-
+   
    if nodes <= partition_conf.max_nodes and
       cpus == partition_conf.min_cpus and
       cpus == partition_conf.max_cpus and
       memory >= partition_conf.min_memory and
       memory <= partition_conf.max_memory then
-	 return true
+      return true
    end
    
    return false
