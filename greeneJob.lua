@@ -88,70 +88,9 @@ local function setup_is_valid()
    return true
 end
 
--- test function
-
-local function print_job_desc_verbose()
-   
-   slurm_log(" === Print job desc ===")
-
-   --greeneUtils.print_NO_VALs()
-
-   slurm_log("time_limit = %d", job_desc.time_limit)
-   slurm_log("ntasks_per_node: %d", job_desc.ntasks_per_node)
-   slurm_log("ntasks_per_socket: %d", job_desc.ntasks_per_socket)
-   slurm_log("num_tasks = %d", job_desc.num_tasks)
-   slurm_log("pn_min_cpus: %d", job_desc.pn_min_cpus)
-   slurm_log("pn_min_memory: %d", job_desc.pn_min_memory)
-   slurm_log("cpus_per_task: %d", job_desc.cpus_per_task)
-
-   slurm_log("min_nodes: %d", job_desc.min_nodes)
-   slurm_log("max_nodes: %d", job_desc.max_nodes)
-
-   if memory_is_specified(job_desc.min_mem_per_cpu) then
-      slurm_log("min_mem_per_cpu: %d", job_desc.min_mem_per_cpu)
-   end
-   
-   slurm_log("requeue: %d", job_desc.requeue)
-
-   if job_desc.account ~= nil then slurm_log("account: %s", job_desc.account) end
-   
-   if job_desc.qos ~= nil then slurm_log("qos: %s", job_desc.qos) end
-   
-   if job_desc.mail_user ~= nil then slurm_log("mail_user: %s", job_desc.mail_user) end
-   
-   if job_desc.partition ~= nil then slurm_log("partitions: %s", job_desc.partition) end
-   
-   if job_desc.gres ~= nil then slurm_log("gres: %s", job_desc.gres) end
-   if job_desc.gres_bind ~= nil then slurm_log("gres_bind: %s", job_desc.gres_bind) end
-
-   if job_desc.features ~= nil then slurm_log("features: %s", job_desc.features) end
-
-   if job_desc.default_account ~= nil then slurm_log("default_account: %s", job_desc.default_account) end
-
-   if job_desc.script ~= nil then
-      slurm_log("script:\n%s", job_desc.script)
-   else
-      slurm_log("no script, interactive job")
-   end
-   
-   if job_desc.argc > 0 then
-      slurm_log("argc: %d", job_desc.argc)
-      local argv = job_desc.argv[0]
-      for i = 1, (job_desc.argc - 1) do
-	 argv = argv .. " " .. job_desc.argv[i]
-      end
-      slurm_log("sbatch script with arguments: %s", argv)
-   end
-
-   if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
-
-   return
-end
-
-
 local function print_job_desc()
 
-   slurm_log("==== job desc ====")
+   slurm_log("**==== print job desc ====**")
 
    if job_desc.user_name ~= nil then slurm_log("user: %s", job_desc.user_name) end
 
@@ -182,6 +121,33 @@ local function print_job_desc()
    end
    
    return
+end
+
+local function print_job_desc_verbose()
+
+   print_job_desc()
+   
+   slurm_log("time_limit = %d", job_desc.time_limit)
+   slurm_log("ntasks_per_node: %d", job_desc.ntasks_per_node)
+   slurm_log("ntasks_per_socket: %d", job_desc.ntasks_per_socket)
+   slurm_log("num_tasks = %d", job_desc.num_tasks)
+   slurm_log("pn_min_cpus: %d", job_desc.pn_min_cpus)
+   slurm_log("pn_min_memory: %d", job_desc.pn_min_memory)
+   slurm_log("cpus_per_task: %d", job_desc.cpus_per_task)
+
+   slurm_log("min_nodes: %d", job_desc.min_nodes)
+   slurm_log("max_nodes: %d", job_desc.max_nodes)
+
+   if memory_is_specified(job_desc.min_mem_per_cpu) then
+      slurm_log("min_mem_per_cpu: %d", job_desc.min_mem_per_cpu)
+   end
+   
+   slurm_log("requeue: %d", job_desc.requeue)
+
+   if job_desc.mail_user ~= nil then slurm_log("mail_user: %s", job_desc.mail_user) end
+   
+   if job_desc.gres ~= nil then slurm_log("gres: %s", job_desc.gres) end
+   if job_desc.gres_bind ~= nil then slurm_log("gres_bind: %s", job_desc.gres_bind) end
 end
 
 function setup_default_compute_resources()
