@@ -23,7 +23,8 @@ local QoSs = { "interact",
 
 local qos_configurations = {
 
-   interact = { interactive = true, time_min = 0, time_max = interactive_time_limit },
+   interact = { interactive = true, time_min = 0, time_max = interactive_time_limit,
+		max_cpus = 48, max_gpus = 4 },
    
    cpu48 = { gpu = false, time_min = 0, time_max = two_days },
    cpu168 = { gpu = false, time_min = two_days, time_max = seven_days },
@@ -51,15 +52,21 @@ local function fit_into_qos(qos_name)
    local qos = qos_configurations[qos_name]
 
    if qos == nil then return false end
-   
+
    if qos.interactive ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
+
+   if qos.max_cpus ~= nil then
+      local n_cpus, n_gpus = greeneCommon.total_cpus_and_gpus()
+      if n_cpus > qos.max_cpus then return false end
+      if n_gpus > qos.max_gpus then return false end
+   end
    
    if qos.gpu ~= nil and qos.gpu ~= greeneCommon.is_gpu_job() then return false end
-   
+
    if (qos.users ~= nil and greeneUtils.in_table(qos.users, greeneCommon.netid())) or qos.users == nil then
       if time_limit > qos.time_min and time_limit <= qos.time_max then return true end
    end
-	 
+
    return false
 end
 

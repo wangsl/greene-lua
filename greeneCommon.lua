@@ -77,6 +77,23 @@ local function user_is_blocked(netid)
    return false
 end
 
+local function total_cpus_and_gpus()
+   local n_cpus = 0
+   local n_gpus = 0
+   
+   if job_desc.num_tasks ~= uint32_NO_VAL then
+      n_cpus = job_desc.cpus_per_task * job_desc.num_tasks
+   else
+      n_cpus = job_desc.cpus_per_task * job_desc.ntasks_per_node * job_desc.min_nodes
+   end
+
+   if gpus > 0 then
+      n_gpus = gpus * job_desc.min_nodes
+   end
+   
+   return n_cpus, n_gpus
+end
+
 local function setup_parameters(args)
    job_desc = args.job_desc
    if job_desc.gres ~= nil then
@@ -96,8 +113,8 @@ greeneCommon.setup_parameters = setup_parameters
 greeneCommon.netid = netid
 greeneCommon.is_interactive_job = is_interactive_job
 greeneCommon.is_gpu_job = is_gpu_job
-
 greeneCommon.user_is_blocked = user_is_blocked
+greeneCommon.total_cpus_and_gpus = total_cpus_and_gpus
 
 slurm_log("To load greeneCommon.lua")
 

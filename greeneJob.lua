@@ -71,8 +71,18 @@ local function setup_parameters(args)
    
 end
 
+local function ntasks_is_specified()
+   if job_desc.num_tasks ~= uint32_NO_VAL and job_desc.ntasks_per_node == uint16_NO_VAL then
+      user_log("Plase do not specify --ntasks on prince cluster, try to use --nodes and --tasks-per-node together")
+      return true
+   end
+   return false
+end
+
 local function setup_is_valid()
 
+   -- if ntasks_is_specified() then return false end
+   
    if greeneCommon.is_gpu_job() then
       if not greeneGPU.setup_is_valid() then return false end
    else
