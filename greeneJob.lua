@@ -90,7 +90,7 @@ end
 
 -- test function
 
-local function print_job_desc()
+local function print_job_desc_verbose()
    
    slurm_log(" === Print job desc ===")
 
@@ -148,6 +148,42 @@ local function print_job_desc()
    return
 end
 
+
+local function print_job_desc()
+
+   slurm_log("==== job desc ====")
+
+   if job_desc.user_name ~= nil then slurm_log("user: %s", job_desc.user_name) end
+
+   if job_desc.account ~= nil then slurm_log("account: %s", job_desc.account) end
+
+   if job_desc.partition ~= nil then slurm_log("partitions: %s", job_desc.partition) end
+   
+   if job_desc.qos ~= nil then slurm_log("qos: %s", job_desc.qos) end
+   
+   if job_desc.features ~= nil then slurm_log("features: %s", job_desc.features) end
+
+   if job_desc.default_account ~= nil then slurm_log("default_account: %s", job_desc.default_account) end
+
+   if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
+
+   if job_desc.argc > 0 then
+      local argv = job_desc.argv[0]
+      for i = 1, (job_desc.argc - 1) do
+	 argv = argv .. " " .. job_desc.argv[i]
+      end
+      slurm_log("sbatch script with arguments: %s", argv)
+   end
+   
+   if job_desc.script ~= nil then
+      slurm_log("script:\n%s", job_desc.script)
+   else
+      slurm_log("no script, interactive job")
+   end
+   
+   return
+end
+
 function setup_default_compute_resources()
 
    if job_desc.mail_type ~= 0 and job_desc.mail_user == nil then
@@ -184,6 +220,7 @@ end
 
 -- functions
 greeneJob.setup_parameters = setup_parameters
+greeneJob.print_job_desc_verbose = print_job_desc_verbose
 greeneJob.print_job_desc = print_job_desc
 greeneJob.setup_is_valid = setup_is_valid
 

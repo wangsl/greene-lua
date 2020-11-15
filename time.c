@@ -84,7 +84,7 @@ LUALIB_API int luaopen_time(lua_State *L)
 #else
   luaL_newlib(L, time_lib);
 #endif
-  info("              : To load time.so, loaded %d times", ++loaded_times);
+  info("lua: To load time.so, loaded %d times", ++loaded_times);
   return 1;
 }
 

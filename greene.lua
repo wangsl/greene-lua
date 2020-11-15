@@ -23,10 +23,12 @@ local function job_submission(job_desc, part_list, submit_uid)
    
    if greeneCommon.user_is_blocked(job_desc.user_name) then return slurm.ERROR end
 
-   if job_desc.script ~= nil then slurm_log("script:\n%s", job_desc.script) end
+   --if job_desc.script ~= nil then slurm_log("script:\n%s", job_desc.script) end
 
    greeneJob.setup_parameters{job_desc = job_desc}
+   
    greeneJob.print_job_desc()
+   
    if not greeneJob.setup_is_valid() then return slurm.ERROR end
    
    local time_end = time.getMicroseconds()
@@ -52,7 +54,6 @@ greene.job_modification = job_modification
 slurm_log("To load greene.lua")
 
 return greene
-
 
 
 

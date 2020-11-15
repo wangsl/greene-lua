@@ -13,7 +13,7 @@ local two_days = greeneUtils.two_days
 local seven_days = greeneUtils.seven_days
 local unlimited_time = greeneUtils.unlimited_time
 
-local interative_time_limit = greeneUtils.hours_to_mins(4)
+local interactive_time_limit = greeneUtils.hours_to_mins(4)
 
 local time_limit = 0
 
@@ -23,7 +23,7 @@ local QoSs = { "interact",
 
 local qos_configurations = {
 
-   interact = { interative = true, time_min = 0, time_max = interative_time_limit },
+   interact = { interactive = true, time_min = 0, time_max = interactive_time_limit },
    
    cpu48 = { gpu = false, time_min = 0, time_max = two_days },
    cpu168 = { gpu = false, time_min = two_days, time_max = seven_days },
@@ -49,17 +49,15 @@ local qos_configurations = {
 local function fit_into_qos(qos_name)
    
    local qos = qos_configurations[qos_name]
-   
+
    if qos == nil then return false end
-
-   if qos.interative ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
-
+   
+   if qos.interactive ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
+   
    if qos.gpu ~= nil and qos.gpu ~= greeneCommon.is_gpu_job() then return false end
    
    if (qos.users ~= nil and greeneUtils.in_table(qos.users, greeneCommon.netid())) or qos.users == nil then
-      if time_limit > qos.time_min and time_limit <= qos.time_max then
-	 return true
-      end
+      if time_limit > qos.time_min and time_limit <= qos.time_max then return true end
    end
 	 
    return false
