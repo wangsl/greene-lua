@@ -35,7 +35,7 @@ local partition_configurations = {
    cl =  { min_cpus = 1, max_cpus = 96,
 	   max_nodes = 4,
 	   min_memory = 50, max_memory = 3014,
-	   min_ave_memory = 30, max_ave_memory = 3014
+	   min_ave_memory = 0, max_ave_memory = 3014
    },
 
    cpu_gpu =  { min_cpus = 1, max_cpus = 20,
@@ -45,6 +45,30 @@ local partition_configurations = {
 		time_limit = greeneUtils.hours_to_mins(5)
    }
 }
+
+local single_partition_configurations = {
+   
+   cs =  { min_cpus = 48, max_cpus = 48,
+	   max_nodes = 524,
+	   min_memory = 0, max_memory = 180
+   }
+}
+
+local function fit_into_single_partition(part_name)
+   local partition_conf = single_partition_configurations[part_name]
+
+   if partition_conf == nil then return false end
+
+   if nodes <= partition_conf.max_nodes and
+      cpus == partition_conf.min_cpus and
+      cpus == partition_conf.max_cpus and
+      memory >= partition_conf.min_memory and
+      memory <= partition_conf.max_memory then
+	 return true
+   end
+   
+   return false
+end
 
 local function fit_into_partition(part_name)
    local partition_conf = partition_configurations[part_name]
@@ -69,6 +93,11 @@ end
 local function valid_partitions()
    local partitions_ = nil
    for _, part_name in pairs(partitions) do
+
+      if fit_into_single_partition(part_name) then
+	 return part_name
+      end
+      
       if fit_into_partition(part_name) then
 	 if partitions_ == nil then
 	    partitions_ = part_name
