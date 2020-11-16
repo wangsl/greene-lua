@@ -5,6 +5,10 @@ local greeneCommon = { }
 local greeneUtils = require "greeneUtils"
 local greeneSpecialUsers = require "greeneSpecialUsers"
 
+local uint16_NO_VAL = greeneUtils.uint16_NO_VAL
+local uint32_NO_VAL = greeneUtils.uint32_NO_VAL
+local uint64_NO_VAL = greeneUtils.uint64_NO_VAL
+
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
 
@@ -80,7 +84,7 @@ end
 local function total_cpus_and_gpus()
    local n_cpus = 0
    local n_gpus = 0
-   
+
    if job_desc.num_tasks ~= uint32_NO_VAL then
       n_cpus = job_desc.cpus_per_task * job_desc.num_tasks
    else
