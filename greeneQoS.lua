@@ -19,7 +19,8 @@ local time_limit = 0
 
 local QoSs = { "interact",
 	       "cpuplus", "cpu48", "cpu168",
-	       "gpuplus", "gpu48", "gpu168" }
+	       "gpuplus", "gpu48", "gpu168",
+	       "cds" }
 
 local qos_configurations = {
 
@@ -40,6 +41,11 @@ local qos_configurations = {
    gpuplus = { gpu = true,
 	       time_min = 0, time_max = seven_days,
 	       users = greeneSpecialUsers.gpuplus_users },
+
+   cds = { gpu = true,
+	   time_min = 0, time_max = seven_days,
+	   account = "cds" }
+   
    --[[
       cpu365 = { time_min = seven_days, time_max = unlimited_time,
       users = princeStakeholders.users_with_unlimited_wall_time
@@ -62,6 +68,8 @@ local function fit_into_qos(qos_name)
    end
    
    if qos.gpu ~= nil and qos.gpu ~= greeneCommon.is_gpu_job() then return false end
+
+   if qos.account ~= nil and qos.account ~= greeneCommon.account() then return false end
 
    if (qos.users ~= nil and greeneUtils.in_table(qos.users, greeneCommon.netid())) or qos.users == nil then
       if time_limit > qos.time_min and time_limit <= qos.time_max then return true end

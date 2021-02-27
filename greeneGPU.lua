@@ -19,6 +19,14 @@ local available_gpu_types = { "v100", "rtx8000" }
 -- this is the order to assign partitions
 local partitions = { "cds_rtx_d", "cds_rtx_a", "rtx8000", "v100" }
 
+local account_to_partitions = {
+   cds = { "cds_rtx_d", "cds_rtx_a", "v100" }
+}
+
+local qos_to_partitions = {
+   cds = { "cds_rtx_d" }
+}
+
 local gpu_configurations = {
    
    v100 = { gpu = "v100",
@@ -48,6 +56,46 @@ local partition_configurations = {
 partition_configurations.cds_rtx_d.account = "cds"
 partition_configurations.cds_rtx_a.account = "cds"
 
+local function candidate_partitions()
+   
+   local partitions_ = nil
+
+   local account_partitions = nil
+   if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
+      account_partitions = account_to_partitions[greeneCommon.account()]
+   end
+   
+   local qos_partitions = nil
+   if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
+      qos_partitions = qos_to_partitions[greeneCommon.qos()]
+   end
+
+   if qos_partitions ~= nil then
+      partitions_ = qos_partitions
+   elseif account_partitions ~= nil then
+      partitions_ = account_partitions
+   else
+      partitions_ = partitions
+   end
+
+   return partitions_
+end
+
+local function fit_into_partition_based_on_account_and_qos(part_name)
+
+   if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
+      local account_partitions = account_to_partitions[greeneCommon.account()]
+      if not greeneUtils.in_table(account_partitions, part_name) then return false end
+   end
+
+   if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
+      local qos_partitions = qos_to_partitions[greeneCommon.qos()]
+      if not greeneUtils.in_table(qos_partitions, part_name) then return false end
+   end
+
+   return true
+end
+
 local function gpu_type_is_valid()
    if gpu_type == nil then return true end
    
@@ -69,6 +117,9 @@ local function number_of_cpus_is_ge_than_number_of_gpus()
 end
 
 local function fit_into_partition(part_name)
+
+   if not fit_into_partition_based_on_account_and_qos(part_name) then return false end
+   
    local partition_conf = partition_configurations[part_name]
 
    if partition_conf == nil then return false end
@@ -91,7 +142,8 @@ end
 
 local function valid_partitions()
    local partitions_ = nil
-   for _, part_name in pairs(partitions) do
+   --for _, part_name in pairs(partitions) do
+   for _, part_name in pairs(candidate_partitions()) do
       if fit_into_partition(part_name) then
 	 if partitions_ == nil then
 	    partitions_ = part_name
@@ -104,6 +156,9 @@ local function valid_partitions()
 end
 
 local function partitions_are_valid()
+
+   if greeneCommon.job_desc.partition == nil then return false end
+   
    local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
    local part_name = nil
    for _, part_name in pairs(partitions) do

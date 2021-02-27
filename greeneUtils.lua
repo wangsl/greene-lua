@@ -89,6 +89,7 @@ greeneUtils.deep_copy = deep_copy
 
 greeneUtils.mins_to_days = mins_to_days
 greeneUtils.hours_to_mins = hours_to_mins
+greeneUtils.n_intersection = n_intersection
 
 -- data
 
