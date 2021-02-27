@@ -71,6 +71,10 @@ local function netid()
    return job_desc.user_name
 end
 
+local function account()
+   return job_desc.account
+end
+
 local function user_is_blocked(netid)
    local blocked_users = greeneSpecialUsers.blocked_users
    if #blocked_users > 0 and greeneUtils.in_table(blocked_users, netid) then
@@ -119,6 +123,7 @@ greeneCommon.is_interactive_job = is_interactive_job
 greeneCommon.is_gpu_job = is_gpu_job
 greeneCommon.user_is_blocked = user_is_blocked
 greeneCommon.total_cpus_and_gpus = total_cpus_and_gpus
+greeneCommon.account = account
 
 slurm_log("To load greeneCommon.lua")
 

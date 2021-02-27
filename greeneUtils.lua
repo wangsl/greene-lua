@@ -59,12 +59,33 @@ local function print_NO_VALs()
    -- slurm.log_info("uint64_NO_AVL: %d", uint64_NO_VAL)
 end
 
+local function shallow_copy(original)
+   local copy = {}
+   for key, value in pairs(original) do
+      copy[key] = value
+   end
+   return copy
+end
+
+local function deep_copy(original)
+   local copy = {}
+   for k, v in pairs(original) do
+      if type(v) == "table" then
+	 v = deep_copy(v)
+      end
+      copy[k] = v
+   end
+   return copy
+end
+
 -- functions
 
 greeneUtils.split = split
 greeneUtils.in_table = in_table
 greeneUtils.insert_to_table_if_not_exist = insert_to_table_if_not_exist
 greeneUtils.is_empty = is_empty
+greeneUtils.shallow_copy = shallow_copy
+greeneUtils.deep_copy = deep_copy
 
 greeneUtils.mins_to_days = mins_to_days
 greeneUtils.hours_to_mins = hours_to_mins

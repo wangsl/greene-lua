@@ -17,9 +17,9 @@ local time_limit = 0
 local available_gpu_types = { "v100", "rtx8000" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100" }
+local partitions = { "cds_rtx_d", "cds_rtx_a", "rtx8000", "v100" }
 
-local partition_configurations = {
+local gpu_configurations = {
    
    v100 = { gpu = "v100",
 	    { gpus = 1, max_cpus = 20, max_memory = 200 },
@@ -35,6 +35,18 @@ local partition_configurations = {
 	       { gpus = 4, max_cpus = 48, max_memory = 369 }
    }
 }
+
+local partition_configurations = {
+   
+   v100 = greeneUtils.shallow_copy(gpu_configurations.v100),
+   rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+   
+   cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+   cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000)
+}
+
+partition_configurations.cds_rtx_d.account = "cds"
+partition_configurations.cds_rtx_a.account = "cds"
 
 local function gpu_type_is_valid()
    if gpu_type == nil then return true end
@@ -68,10 +80,12 @@ local function fit_into_partition(part_name)
    end
    
    if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
+
+   if partition_conf.account ~= nil and partition_conf.account ~= greeneCommon.account() then return false end
    
    local conf = partition_conf[gpus]
    if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then return true end
-   
+
    return false
 end
 
