@@ -22,16 +22,16 @@ local partitions = { "rtx8000", "v100" }
 local partition_configurations = {
    
    v100 = { gpu = "v100",
-	    { gpus = 1, max_cpus = 20, max_memory = 100 },
-	    { gpus = 2, max_cpus = 24, max_memory = 200 },
-	    { gpus = 3, max_cpus = 44, max_memory = 300 },
+	    { gpus = 1, max_cpus = 20, max_memory = 200 },
+	    { gpus = 2, max_cpus = 24, max_memory = 300 },
+	    { gpus = 3, max_cpus = 44, max_memory = 350 },
 	    { gpus = 4, max_cpus = 48, max_memory = 369 }
    },
    
    rtx8000 = { gpu = "rtx8000",
-	       { gpus = 1, max_cpus = 20, max_memory = 100 },
-	       { gpus = 2, max_cpus = 24, max_memory = 200 },
-	       { gpus = 3, max_cpus = 44, max_memory = 300 },
+	       { gpus = 1, max_cpus = 20, max_memory = 200 },
+	       { gpus = 2, max_cpus = 24, max_memory = 300 },
+	       { gpus = 3, max_cpus = 44, max_memory = 350 },
 	       { gpus = 4, max_cpus = 48, max_memory = 369 }
    }
 }
