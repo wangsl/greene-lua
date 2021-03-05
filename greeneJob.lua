@@ -7,6 +7,7 @@ local greeneCommon = require "greeneCommon"
 local greeneCPU = require "greeneCPU"
 local greeneGPU = require "greeneGPU"
 local greeneQoS = require "greeneQoS"
+local greeneReservation = require "greeneReservation"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -80,6 +81,8 @@ local function ntasks_is_specified()
 end
 
 local function setup_is_valid()
+
+   if not greeneReservation.check_reservation_is_OK(job_desc) then return false; end
 
    -- if ntasks_is_specified() then return false end
    

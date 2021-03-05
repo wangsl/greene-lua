@@ -8,7 +8,7 @@ local slurm_log = greeneUtils.slurm_log
 
 -- data
 
-greeneSpecialUsers.blocked_users = { }
+greeneSpecialUsers.blocked_users = { "klb11" }
 
 greeneSpecialUsers.cpuplus_users = { }
  
