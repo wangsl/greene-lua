@@ -45,7 +45,7 @@ local partition_configurations = {
    cl =  { min_cpus = 1, max_cpus = 96,
 	   max_nodes = 4,
 	   min_memory = 30, max_memory = 3014,
-	   min_ave_memory = 30, max_ave_memory = 3014
+	   min_ave_memory = 6, max_ave_memory = 3014
    },
 
    cpu_gpu =  { min_cpus = 1, max_cpus = 20,
