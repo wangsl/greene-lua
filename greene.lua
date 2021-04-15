@@ -18,6 +18,11 @@ local function job_submission(job_desc, part_list, submit_uid)
 	 return slurm.ERROR
       end
    end
+
+   if job_desc.partition == "mi50" then
+      slurm_log("Job with AMD MI50 GPUs")
+      return slurm.SUCCESS
+   end
    
    local time_start = time.getMicroseconds()
    

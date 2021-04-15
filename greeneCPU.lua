@@ -30,29 +30,29 @@ end
 
 local partition_configurations = {
 
-   cs =  { min_cpus = 1, max_cpus = 48,
-	   max_nodes = 524,
-	   min_memory = 0, max_memory = 180,
-	   min_ave_memory = 0, max_ave_memory = 16, 
+   cs = { min_cpus = 1, max_cpus = 48,
+	  max_nodes = 524,
+	  min_memory = 0, max_memory = 180,
+	  min_ave_memory = 0, max_ave_memory = 16, 
    },
    
-   cm =  { min_cpus = 1, max_cpus = 48,
-	   max_nodes = 40,
-	   min_memory = 10, max_memory = 369,
-	   min_ave_memory = 3, max_ave_memory = 64
+   cm = { min_cpus = 1, max_cpus = 48,
+	  max_nodes = 40,
+	  min_memory = 10, max_memory = 369,
+	  min_ave_memory = 7, max_ave_memory = 64
    },
    
-   cl =  { min_cpus = 1, max_cpus = 96,
-	   max_nodes = 4,
-	   min_memory = 30, max_memory = 3014,
-	   min_ave_memory = 6, max_ave_memory = 3014
+   cl = { min_cpus = 1, max_cpus = 96,
+	  max_nodes = 4,
+	  min_memory = 30, max_memory = 3014,
+	  min_ave_memory = 20, max_ave_memory = 3014
    },
-
-   cpu_gpu =  { min_cpus = 1, max_cpus = 20,
-		max_nodes = 2,
-		min_memory = 0, max_memory = 180,
-		min_ave_memory = 0, max_ave_memory = 180,
-		time_limit = greeneUtils.hours_to_mins(4)
+   
+   cpu_gpu = { min_cpus = 1, max_cpus = 20,
+	       max_nodes = 2,
+	       min_memory = 0, max_memory = 180,
+	       min_ave_memory = 0, max_ave_memory = 180,
+	       time_limit = greeneUtils.hours_to_mins(4)
    }
 }
 
