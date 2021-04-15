@@ -20,7 +20,7 @@ local function available_partitions()
    local partitions = nil
    if greeneCommon.is_interactive_job() then
       -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
-      partitions = { "cl", "cm", "cs", "cpu_gpu" }
+      partitions = { "cl", "cm", "cs", "cpu_gpu", "mi50" }
    else
       --partitions = { "cs", "cm", "cl" }
       partitions = { "cl", "cm", "cs" }
@@ -53,6 +53,14 @@ local partition_configurations = {
 	       min_memory = 0, max_memory = 180,
 	       min_ave_memory = 0, max_ave_memory = 180,
 	       time_limit = greeneUtils.hours_to_mins(4)
+   },
+
+   mi50 = { min_cpus = 1, max_cpus = 48,
+	    max_nodes = 20,
+	    min_memory = 0, max_memory = 180,
+	    min_ave_memory = 0, max_ave_memory = 180,
+	    time_limit = greeneUtils.hours_to_mins(48),
+	    require_partition = true
    }
 }
 
@@ -88,6 +96,8 @@ end
 local function fit_into_partition(part_name)
    local partition_conf = partition_configurations[part_name]
    if partition_conf == nil then return false end
+
+   if partition_conf.require_partition and part_name ~= greeneCommon.partition() then return false end
 
    if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then
 	 return false

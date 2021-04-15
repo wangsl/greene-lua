@@ -79,6 +79,10 @@ local function qos()
    return job_desc.qos
 end
 
+local function partition()
+   return job_desc.partition
+end
+
 local function user_is_blocked(netid)
    local blocked_users = greeneSpecialUsers.blocked_users
    if #blocked_users > 0 and greeneUtils.in_table(blocked_users, netid) then
@@ -129,6 +133,7 @@ greeneCommon.user_is_blocked = user_is_blocked
 greeneCommon.total_cpus_and_gpus = total_cpus_and_gpus
 greeneCommon.account = account
 greeneCommon.qos = qos
+greeneCommon.partition = partition
 
 slurm_log("To load greeneCommon.lua")
 

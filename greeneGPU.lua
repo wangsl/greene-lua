@@ -14,10 +14,10 @@ local memory = 0
 local gpu_type = nil
 local time_limit = 0
 
-local available_gpu_types = { "v100", "rtx8000" }
+local available_gpu_types = { "v100", "rtx8000", "mi50" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100" }
+local partitions = { "rtx8000", "v100", "mi50" }
 
 local account_to_partitions = {
    cds = { "cds_rtx_d", "cds_rtx_a", "v100" }
@@ -41,6 +41,19 @@ local gpu_configurations = {
 	       { gpus = 2, max_cpus = 24, max_memory = 300 },
 	       { gpus = 3, max_cpus = 44, max_memory = 350 },
 	       { gpus = 4, max_cpus = 48, max_memory = 369 }
+   },
+   
+   mi50 = {
+      gpu = "mi50",
+      require_gpu_type = true,
+      { gpus = 1, max_cpus = 48, max_memory = 250 },
+      { gpus = 2, max_cpus = 72, max_memory = 300 },
+      { gpus = 3, max_cpus = 76, max_memory = 340 },
+      { gpus = 4, max_cpus = 80, max_memory = 360 },
+      { gpus = 5, max_cpus = 84, max_memory = 390 },
+      { gpus = 6, max_cpus = 88, max_memory = 420 },
+      { gpus = 7, max_cpus = 92, max_memory = 450 },
+      { gpus = 8, max_cpus = 96, max_memory = 490 }
    }
 }
 
@@ -50,7 +63,9 @@ local partition_configurations = {
    rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    
    cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
-   cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000)
+   cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+
+   mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
 }
 
 partition_configurations.cds_rtx_d.account = "cds"
@@ -123,9 +138,11 @@ local function fit_into_partition(part_name)
    local partition_conf = partition_configurations[part_name]
 
    if partition_conf == nil then return false end
+
+   if partition_conf.require_gpu_type and gpu_type ~= partition_conf.gpu then return false end
    
    if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
-   
+
    if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
       return false
    end
@@ -133,7 +150,7 @@ local function fit_into_partition(part_name)
    if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
 
    if partition_conf.account ~= nil and partition_conf.account ~= greeneCommon.account() then return false end
-   
+
    local conf = partition_conf[gpus]
    if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then return true end
 

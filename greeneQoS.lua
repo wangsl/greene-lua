@@ -18,8 +18,10 @@ local interactive_time_limit = greeneUtils.hours_to_mins(4)
 local time_limit = 0
 
 local QoSs = { "interact",
-	       "cpuplus", "cpu48", "cpu168",
-	       "gpuplus", "gpu48", "gpu168",
+	       "cpuplus",
+	       "cpu48", "cpu168",
+	       "gpuamd", "gpuplus",
+	       "gpu48", "gpu168",
 	       "cds" }
 
 local qos_configurations = {
@@ -32,6 +34,8 @@ local qos_configurations = {
    
    gpu48 = { gpu = true, time_min = 0, time_max = two_days },
    gpu168 = { gpu = true, time_min = two_days, time_max = seven_days },
+
+   gpuamd = { gpu = true, gpu_type = "mi50", time_min = 0, time_max = two_days },
    
    -- special QoS with user access control
    
@@ -60,6 +64,11 @@ local function fit_into_qos(qos_name)
    if qos == nil then return false end
 
    if qos.interactive ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
+
+   if qos.gpu_type ~= nil then
+      if greeneCommon.gpu_type == nil then return false end
+      if greeneCommon.gpu_type ~= qos.gpu_type then return false end
+   end
 
    if qos.max_cpus ~= nil then
       local n_cpus, n_gpus = greeneCommon.total_cpus_and_gpus()
