@@ -103,7 +103,7 @@ end
 
 local function print_job_desc()
 
-   slurm_log("**==== print job desc ====**")
+   slurm_log("*** ==== SLURM job desc ==== ***")
 
    if job_desc.user_name ~= nil then slurm_log("user: %s", job_desc.user_name) end
 

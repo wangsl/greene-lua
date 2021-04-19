@@ -19,13 +19,6 @@ local function job_submission(job_desc, part_list, submit_uid)
       end
    end
 
-   --[[
-   if job_desc.partition == "mi50" then
-      slurm_log("Job with AMD MI50 GPUs")
-      return slurm.SUCCESS
-   end
-   --]]
-   
    local time_start = time.getMicroseconds()
    
    if greeneCommon.user_is_blocked(job_desc.user_name) then return slurm.ERROR end
