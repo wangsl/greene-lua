@@ -46,13 +46,13 @@ local gpu_configurations = {
    mi50 = {
       gpu = "mi50",
       require_gpu_type = true,
-      { gpus = 1, max_cpus = 48, max_memory = 250 },
+      { gpus = 1, max_cpus = 48, max_memory = 200 },
       { gpus = 2, max_cpus = 72, max_memory = 300 },
-      { gpus = 3, max_cpus = 76, max_memory = 340 },
-      { gpus = 4, max_cpus = 80, max_memory = 360 },
-      { gpus = 5, max_cpus = 84, max_memory = 390 },
-      { gpus = 6, max_cpus = 88, max_memory = 420 },
-      { gpus = 7, max_cpus = 92, max_memory = 450 },
+      { gpus = 3, max_cpus = 76, max_memory = 350 },
+      { gpus = 4, max_cpus = 80, max_memory = 370 },
+      { gpus = 5, max_cpus = 84, max_memory = 400 },
+      { gpus = 6, max_cpus = 88, max_memory = 430 },
+      { gpus = 7, max_cpus = 92, max_memory = 460 },
       { gpus = 8, max_cpus = 96, max_memory = 490 }
    }
 }
