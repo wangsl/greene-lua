@@ -96,6 +96,15 @@ local function valid_qos()
    return nil
 end
 
+local function qos_gpu168_warnings()
+   local qos = greeneCommon.job_desc.qos
+   if qos == "gpu168" then
+      user_log("******************************************************************************************")
+      user_log("*** Each user is limited to 4 GPUs in total for all jobs with wall time more than 48 hours")
+      user_log("******************************************************************************************")
+   end
+end
+
 local function qos_is_valid()
    local qos = greeneCommon.job_desc.qos
    if qos == nil then
@@ -112,6 +121,8 @@ local function qos_is_valid()
       user_log("*** Error QoS '%s' does not fit this job", qos)
       return false
    end
+
+   qos_gpu168_warnings()
    
    return true
 end

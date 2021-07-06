@@ -10,7 +10,7 @@ local slurm_log = greeneUtils.slurm_log
 
 greeneSpecialUsers.blocked_users = { }
 
-greeneSpecialUsers.cpuplus_users = { }
+greeneSpecialUsers.cpuplus_users = { "fw18" }
  
 greeneSpecialUsers.gpuplus_users = { }
 
