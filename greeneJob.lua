@@ -119,6 +119,8 @@ local function print_job_desc()
 
    if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
 
+   if job_desc.comment ~= nil then slurm_log("comment: %s", job_desc.comment) end
+
    if job_desc.argc > 0 then
       local argv = job_desc.argv[0]
       for i = 1, (job_desc.argc - 1) do
