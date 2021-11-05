@@ -9,6 +9,7 @@ local greeneCommon = require "greeneCommon"
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
 
+local twelve_hours = greeneUtils.twelve_hours
 local two_days = greeneUtils.two_days
 local seven_days = greeneUtils.seven_days
 local unlimited_time = greeneUtils.unlimited_time
@@ -19,7 +20,7 @@ local time_limit = 0
 
 local QoSs = { "interact",
 	       "cpuplus",
-	       "cpu48", "cpu168",
+	       "cpu48", "cpu168", "cpulow",
 	       "gpuamd", "gpuplus",
 	       "gpu48", "gpu168",
 	       "cds" }
@@ -48,8 +49,11 @@ local qos_configurations = {
 
    cds = { gpu = true,
 	   time_min = 0, time_max = seven_days,
-	   account = "cds" }
+	   account = "cds" },
    
+   cpulow = { gpu = false, time_min = 0, time_max = twelve_hours,
+	      require_qos = true },
+
    --[[
       cpu365 = { time_min = seven_days, time_max = unlimited_time,
       users = princeStakeholders.users_with_unlimited_wall_time
@@ -64,6 +68,8 @@ local function fit_into_qos(qos_name)
    if qos == nil then return false end
 
    if qos.interactive ~= nil and qos.interactive ~= greeneCommon.is_interactive_job() then return false end
+
+   if qos.require_qos and qos_name ~= greeneCommon.qos() then return false end
 
    if qos.gpu_type ~= nil then
       if greeneCommon.gpu_type == nil then return false end
