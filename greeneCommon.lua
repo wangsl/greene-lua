@@ -112,8 +112,11 @@ end
 
 local function setup_parameters(args)
    job_desc = args.job_desc
-   if job_desc.gres ~= nil then
-      gres_for_gpu(job_desc.gres)
+   -- if job_desc.gres ~= nil then
+   --    gres_for_gpu(job_desc.gres)
+   if job_desc.gres ~= nil and 
+      (string.match(job_desc.gres, "^gres:gpu") or string.match(job_desc.gres, "^gpu")) then
+         gres_for_gpu(job_desc.gres:gsub("^gres:", ""))
    else
       gpu_type = nil
       gpus = 0

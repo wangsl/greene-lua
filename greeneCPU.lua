@@ -23,7 +23,7 @@ local function available_partitions()
       partitions = { "cl", "cm", "cs", "cpu_gpu", "mi50" }
    else
       --partitions = { "cs", "cm", "cl" }
-      partitions = { "cl", "cm", "cs" }
+      partitions = { "cl", "cm", "cs", "cpu_gpu" }
    end
    return partitions
 end
