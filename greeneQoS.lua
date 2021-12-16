@@ -19,16 +19,16 @@ local interactive_time_limit = greeneUtils.hours_to_mins(4)
 local time_limit = 0
 
 local QoSs = { "interact",
-	       "cpuplus",
-	       "cpu48", "cpu168", "cpulow",
-	       "gpuamd", "gpuplus",
-	       "gpu48", "gpu168",
-	       "cds" }
+               "cpuplus",
+               "cpu48", "cpu168", "cpulow",
+               "gpuamd", "gpuplus",
+               "gpu48", "gpu168",
+               "cds" }
 
 local qos_configurations = {
 
    interact = { interactive = true, time_min = 0, time_max = interactive_time_limit,
-		max_cpus = 48, max_gpus = 4 },
+               max_cpus = 48, max_gpus = 4 },
    
    cpu48 = { gpu = false, time_min = 0, time_max = two_days },
    cpu168 = { gpu = false, time_min = two_days, time_max = seven_days },
@@ -41,18 +41,18 @@ local qos_configurations = {
    -- special QoS with user access control
    
    cpuplus = { gpu = false, time_min = 0, time_max = seven_days,
-	       users = greeneSpecialUsers.cpuplus_users },
+               users = greeneSpecialUsers.cpuplus_users },
 
    gpuplus = { gpu = true,
-	       time_min = 0, time_max = seven_days,
-	       users = greeneSpecialUsers.gpuplus_users },
+               time_min = 0, time_max = seven_days,
+               users = greeneSpecialUsers.gpuplus_users },
 
    cds = { gpu = true,
-	   time_min = 0, time_max = seven_days,
-	   account = "cds" },
+            time_min = 0, time_max = seven_days,
+            account = "cds" },
    
    cpulow = { gpu = false, time_min = 0, time_max = twelve_hours,
-	      require_qos = true },
+              require_qos = true },
 
    --[[
       cpu365 = { time_min = seven_days, time_max = unlimited_time,
@@ -96,7 +96,7 @@ end
 local function valid_qos()
    for _, qos_name in pairs(QoSs) do
       if fit_into_qos(qos_name) then
-	 return qos_name
+         return qos_name
       end
    end
    return nil

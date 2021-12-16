@@ -25,22 +25,22 @@ local function gres_for_gpu(gres)
    
    if tmp[1] == "gpu" then
       if #tmp > 3 then
-	 gpus = 0
-	 gpu_type = nil
+         gpus = 0
+         gpu_type = nil
       elseif #tmp == 3 then
-	 gpu_type = tmp[2]
-	 gpus = tmp[3]
+         gpu_type = tmp[2]
+         gpus = tmp[3]
       elseif #tmp == 2 then
-	 if tmp[2]:match("^%d+$") then
-	    gpus = tmp[2]
-	    gpu_type = nil
-	 else
-	   gpus = 1
-	   gpu_type = tmp[2]
-	 end
+         if tmp[2]:match("^%d+$") then
+            gpus = tmp[2]
+            gpu_type = nil
+         else
+            gpus = 1
+            gpu_type = tmp[2]
+         end
       elseif #tmp == 1 then
-	 gpus = 1
-	 gpu_type = nil
+            gpus = 1
+            gpu_type = nil
       end
    else
       gpu_type = nil
