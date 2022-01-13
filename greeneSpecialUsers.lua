@@ -17,4 +17,3 @@ greeneSpecialUsers.gpuplus_users = { }
 slurm_log("To load greeneSpeicalUsers.lua")
 
 return greeneSpecialUsers
-

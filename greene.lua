@@ -13,7 +13,7 @@ local user_log = greeneUtils.user_log
 local function job_submission(job_desc, part_list, submit_uid)
    
    if greeneUtils.maintenance_mode then
-      if job_desc.user_name ~= "wang" and job_desc.user_name ~= "sw77" then
+      if job_desc.user_name ~= "wang" and job_desc.user_name ~= "sw77" and job_desc.user_name ~= "wd35" then
 	 user_log("Greene is in maintenance now, job submission is disabled")
 	 return slurm.ERROR
       end
