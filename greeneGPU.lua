@@ -17,7 +17,7 @@ local time_limit = 0
 local available_gpu_types = { "v100", "rtx8000", "mi50" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100", "mi50" }
+local partitions = { "rtx8000", "v100", "mi50", "gpu_misc" }
 
 local account_to_partitions = {
    cds = { "cds_rtx_d", "cds_rtx_a", "v100" }
@@ -54,7 +54,14 @@ local gpu_configurations = {
       { gpus = 6, max_cpus = 88, max_memory = 430 },
       { gpus = 7, max_cpus = 92, max_memory = 460 },
       { gpus = 8, max_cpus = 96, max_memory = 490 }
-   }
+   },
+
+   gpu_misc = { gpu = "v100",
+	    { gpus = 1, max_cpus = 10, max_memory = 200 },
+	    { gpus = 2, max_cpus = 12, max_memory = 300 },
+	    { gpus = 3, max_cpus = 15, max_memory = 350 },
+	    { gpus = 4, max_cpus = 20, max_memory = 369 }
+  }
 }
 
 local partition_configurations = {
@@ -66,6 +73,7 @@ local partition_configurations = {
    cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
 
    mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
+   gpu_misc = greeneUtils.shallow_copy(gpu_configurations.gpu_misc),
 }
 
 partition_configurations.cds_rtx_d.account = "cds"
