@@ -17,14 +17,14 @@ local time_limit = 0
 local available_gpu_types = { "v100", "rtx8000", "mi50" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100", "mi50", "gpu_misc" }
+local partitions = { "rtx8000", "v100", "mi50", "gpu_misc_v100" }
 
 local account_to_partitions = {
-   cds = { "cds_rtx_d", "cds_rtx_a", "v100" }
+   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
 }
 
 local qos_to_partitions = {
-   cds = { "cds_rtx_d" }
+   cds = { "cds_rtx_d", "cds_dgx_d" }
 }
 
 local gpu_configurations = {
@@ -56,11 +56,22 @@ local gpu_configurations = {
       { gpus = 8, max_cpus = 96, max_memory = 490 }
    },
 
-   gpu_misc = { gpu = "v100",
+   gpu_misc_v100 = { gpu = "v100",
 	    { gpus = 1, max_cpus = 10, max_memory = 200 },
 	    { gpus = 2, max_cpus = 12, max_memory = 300 },
 	    { gpus = 3, max_cpus = 15, max_memory = 350 },
 	    { gpus = 4, max_cpus = 20, max_memory = 369 }
+  },
+
+  dgx1 = { gpu = "v100",
+	    { gpus = 1, max_cpus = 10,  max_memory = 250 },
+	    { gpus = 2, max_cpus = 15,  max_memory = 300 },
+	    { gpus = 3, max_cpus = 18,  max_memory = 350 },
+	    { gpus = 4, max_cpus = 20,  max_memory = 400 },
+	    { gpus = 5, max_cpus = 30,  max_memory = 425 },
+	    { gpus = 6, max_cpus = 35,  max_memory = 450 },
+	    { gpus = 7, max_cpus = 38,  max_memory = 475 },
+	    { gpus = 8, max_cpus = 40,  max_memory = 500 },
   }
 }
 
@@ -71,13 +82,15 @@ local partition_configurations = {
    
    cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+   cds_dgx_d = greeneUtils.shallow_copy(gpu_configurations.dgx1),
 
    mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
-   gpu_misc = greeneUtils.shallow_copy(gpu_configurations.gpu_misc),
+   gpu_misc_v100 = greeneUtils.shallow_copy(gpu_configurations.gpu_misc_v100),
 }
 
 partition_configurations.cds_rtx_d.account = "cds"
 partition_configurations.cds_rtx_a.account = "cds"
+partition_configurations.cds_dgx_d.account = "cds"
 
 local function candidate_partitions()
    
