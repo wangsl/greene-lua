@@ -4,6 +4,7 @@ local greeneCPU = { }
 
 local greeneUtils = require "greeneUtils"
 local greeneCommon = require "greeneCommon"
+local greeneSpecialUsers = require "greeneSpecialUsers"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -20,10 +21,10 @@ local function available_partitions()
    local partitions = nil
    if greeneCommon.is_interactive_job() then
       -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
-      partitions = { "cl", "cm", "cs", "cpu_gpu", "mi50" }
+      partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu", "mi50" }
    else
       --partitions = { "cs", "cm", "cl" }
-      partitions = { "cl", "cm", "cs", "cpu_gpu" }
+      partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu" }
    end
    return partitions
 end
@@ -49,19 +50,26 @@ local partition_configurations = {
    },
    
    cpu_gpu = { min_cpus = 1, max_cpus = 20,
-	       max_nodes = 2,
-	       min_memory = 0, max_memory = 180,
-	       min_ave_memory = 0, max_ave_memory = 180,
-	       time_limit = greeneUtils.hours_to_mins(4)
+    max_nodes = 2,
+    min_memory = 0, max_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 180,
+    time_limit = greeneUtils.hours_to_mins(4)
    },
 
    mi50 = { min_cpus = 1, max_cpus = 48,
-	    max_nodes = 20,
-	    min_memory = 0, max_memory = 180,
-	    min_ave_memory = 0, max_ave_memory = 180,
-	    time_limit = greeneUtils.hours_to_mins(48),
-	    require_partition = true
-   }
+    max_nodes = 20,
+    min_memory = 0, max_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 180,
+    time_limit = greeneUtils.hours_to_mins(48),
+    require_partition = true
+   },
+
+  xwang = { min_cpus = 1, max_cpus = 48,
+	  max_nodes = 10,
+	  min_memory = 0, max_memory = 180,
+	  min_ave_memory = 0, max_ave_memory = 180, 
+    users = greeneSpecialUsers.cns_wang_users
+   },
 }
 
 local special_partition_configurations = {
@@ -78,41 +86,47 @@ local special_partition_configurations = {
 }
 
 local function fit_into_single_partition(part_name)
-   local partition_conf = special_partition_configurations[part_name]
-   
-   if partition_conf == nil then return false end
-   
-   if nodes <= partition_conf.max_nodes and
-      cpus == partition_conf.min_cpus and
-      cpus == partition_conf.max_cpus and
-      memory >= partition_conf.min_memory and
-      memory <= partition_conf.max_memory then
-      return true
-   end
-   
-   return false
+  local partition_conf = special_partition_configurations[part_name]
+  
+  if partition_conf == nil then return false end
+
+  if nodes <= partition_conf.max_nodes and
+    cpus == partition_conf.min_cpus and
+    cpus == partition_conf.max_cpus and
+    memory >= partition_conf.min_memory and
+    memory <= partition_conf.max_memory then
+    return true
+  end
+  
+  return false
 end
 
 local function fit_into_partition(part_name)
-   local partition_conf = partition_configurations[part_name]
-   if partition_conf == nil then return false end
+  local partition_conf = partition_configurations[part_name]
+  if partition_conf == nil then return false end
 
-   if partition_conf.require_partition and part_name ~= greeneCommon.partition() then return false end
+  if partition_conf.users ~= nil and 
+    not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
+    return false
+  end
 
-   if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then
-	 return false
-   end
+  if partition_conf.require_partition and part_name ~= greeneCommon.partition() then return false end
+
+  if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then
+    return false
+  end
    
-   if nodes <= partition_conf.max_nodes and
-      cpus >= partition_conf.min_cpus and
-      cpus <= partition_conf.max_cpus and
-      memory >= partition_conf.min_memory and
-      memory <= partition_conf.max_memory and
-      ave_memory >= partition_conf.min_ave_memory and 
-      ave_memory <= partition_conf.max_ave_memory then
-	 return true
-   end
-   return false
+  if nodes <= partition_conf.max_nodes and
+    cpus >= partition_conf.min_cpus and
+    cpus <= partition_conf.max_cpus and
+    memory >= partition_conf.min_memory and
+    memory <= partition_conf.max_memory and
+    ave_memory >= partition_conf.min_ave_memory and 
+    ave_memory <= partition_conf.max_ave_memory then
+    return true
+  end
+
+  return false
 end
 
 local function valid_partitions()
