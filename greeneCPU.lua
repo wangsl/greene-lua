@@ -18,15 +18,15 @@ local ave_memory = 0
 
 -- this is the order to assign partitions
 local function available_partitions()
-   local partitions = nil
-   if greeneCommon.is_interactive_job() then
-      -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
-      partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu", "mi50" }
-   else
-      --partitions = { "cs", "cm", "cl" }
-      partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu" }
-   end
-   return partitions
+  local partitions = nil
+  if greeneCommon.is_interactive_job() then
+    -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
+    partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu", "mi50" }
+  else
+    --partitions = { "cs", "cm", "cl" }
+    partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu" }
+  end
+  return partitions
 end
 
 local partition_configurations = {
@@ -73,16 +73,15 @@ local partition_configurations = {
 }
 
 local special_partition_configurations = {
-   
-   cs =  { min_cpus = 48, max_cpus = 48,
-	   max_nodes = 524,
-	   min_memory = 0, max_memory = 180
-   },
+  cs =  { min_cpus = 48, max_cpus = 48,
+    max_nodes = 524,
+    min_memory = 0, max_memory = 180
+  },
 
-   cm =  { min_cpus = 48, max_cpus = 48,
-	   max_nodes = 40,
-	   min_memory = 180.001, max_memory = 300
-   }
+  cm =  { min_cpus = 48, max_cpus = 48,
+    max_nodes = 40,
+    min_memory = 180.001, max_memory = 300
+  }
 }
 
 local function fit_into_single_partition(part_name)
@@ -130,49 +129,49 @@ local function fit_into_partition(part_name)
 end
 
 local function valid_partitions()
-   local partitions = available_partitions()
-   local partitions_ = nil
-   for _, part_name in pairs(partitions) do
+  local partitions = available_partitions()
+  local partitions_ = nil
+  for _, part_name in pairs(partitions) do
 
-      if fit_into_single_partition(part_name) then
-	 return part_name
+    if fit_into_single_partition(part_name) then
+      return part_name
+    end
+    
+    if fit_into_partition(part_name) then
+      if partitions_ == nil then
+        partitions_ = part_name
+      else
+        partitions_ = partitions_ .. "," .. part_name
       end
-      
-      if fit_into_partition(part_name) then
-	 if partitions_ == nil then
-	    partitions_ = part_name
-	 else
-	    partitions_ = partitions_ .. "," .. part_name
-	 end
-      end
-   end
-   return partitions_
+    end
+  end
+  return partitions_
 end
 
 local function partitions_are_valid()
-   local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
-   local part_name = nil
-   for _, part_name in pairs(partitions) do
-      if not fit_into_partition(part_name) then
-	 user_log("*** Error partition '%s' is not valid for this job", part_name)
-	 return false
-      end
-   end
-   return true
+  local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
+  local part_name = nil
+  for _, part_name in pairs(partitions) do
+    if not fit_into_partition(part_name) then
+      user_log("*** Error partition '%s' is not valid for this job", part_name)
+      return false
+    end
+  end
+  return true
 end
 
 local function setup_is_valid()
-   if not partitions_are_valid() then return false end
-   return true
+  if not partitions_are_valid() then return false end
+  return true
 end
 
 local function setup_parameters(args)
-   cpus = args.cpus
-   memory = args.memory
-   nodes = args.nodes
-   time_limit = args.time_limit
-   
-   ave_memory = memory/cpus
+  cpus = args.cpus
+  memory = args.memory
+  nodes = args.nodes
+  time_limit = args.time_limit
+  
+  ave_memory = memory/cpus
 end
 
 -- functions
