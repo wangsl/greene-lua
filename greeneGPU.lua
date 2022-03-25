@@ -14,13 +14,13 @@ local memory = 0
 local gpu_type = nil
 local time_limit = 0
 
-local available_gpu_types = { "v100", "rtx8000", "mi50" }
+local available_gpu_types = { "v100", "rtx8000", "a100", "mi50" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100", "mi50", "gpu_misc_v100" }
+local partitions = { "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100" }
 
 local account_to_partitions = {
-   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
+  cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
 }
 
 local qos_to_partitions = {
@@ -63,7 +63,7 @@ local gpu_configurations = {
 	    { gpus = 4, max_cpus = 20, max_memory = 369 }
   },
 
-  dgx1 = { gpu = "v100",
+   dgx1 = { gpu = "v100",
 	    { gpus = 1, max_cpus = 10,  max_memory = 250 },
 	    { gpus = 2, max_cpus = 15,  max_memory = 300 },
 	    { gpus = 3, max_cpus = 18,  max_memory = 350 },
@@ -72,6 +72,13 @@ local gpu_configurations = {
 	    { gpus = 6, max_cpus = 35,  max_memory = 450 },
 	    { gpus = 7, max_cpus = 38,  max_memory = 475 },
 	    { gpus = 8, max_cpus = 40,  max_memory = 500 },
+  },
+
+  a100 = { gpu = "a100",
+	    { gpus = 1, max_cpus = 20, max_memory = 250 },
+	    { gpus = 2, max_cpus = 32, max_memory = 300 },
+	    { gpus = 3, max_cpus = 52, max_memory = 400 },
+	    { gpus = 4, max_cpus = 64, max_memory = 500 }
   }
 }
 
@@ -79,6 +86,7 @@ local partition_configurations = {
    
    v100 = greeneUtils.shallow_copy(gpu_configurations.v100),
    rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+   a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
    
    cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
@@ -91,6 +99,8 @@ local partition_configurations = {
 partition_configurations.cds_rtx_d.account = "cds"
 partition_configurations.cds_rtx_a.account = "cds"
 partition_configurations.cds_dgx_d.account = "cds"
+
+partition_configurations.a100.users = { "wang", "sw77", "wd35", "deng" }
 
 local function candidate_partitions()
    
@@ -165,7 +175,7 @@ local function fit_into_partition(part_name)
    if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
 
    if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
-      return false
+    return false
    end
    
    if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
@@ -195,17 +205,17 @@ end
 
 local function partitions_are_valid()
 
-   if greeneCommon.job_desc.partition == nil then return false end
-   
-   local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
-   local part_name = nil
-   for _, part_name in pairs(partitions) do
-      if not fit_into_partition(part_name) then
-	 user_log("*** Error partition '%s' is not valid for this job", part_name)
-	 return false
-      end
-   end
-   return true
+  if greeneCommon.job_desc.partition == nil then return false end
+  
+  local partitions = greeneUtils.split(greeneCommon.job_desc.partition, ",")
+  local part_name = nil
+  for _, part_name in pairs(partitions) do
+    if not fit_into_partition(part_name) then
+      user_log("*** Error partition '%s' is not valid for this job", part_name)
+      return false
+    end
+  end
+  return true
 end
 
 local function setup_is_valid()
