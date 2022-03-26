@@ -4,6 +4,7 @@ local greeneGPU = { }
 
 local greeneUtils = require "greeneUtils"
 local greeneCommon = require "greeneCommon"
+local greeneSpecialUsers = require "greeneSpecialUsers"
 
 local slurm_log = greeneUtils.slurm_log
 local user_log = greeneUtils.user_log
@@ -100,7 +101,7 @@ partition_configurations.cds_rtx_d.account = "cds"
 partition_configurations.cds_rtx_a.account = "cds"
 partition_configurations.cds_dgx_d.account = "cds"
 
-partition_configurations.a100.users = { "wang", "sw77", "wd35", "deng" }
+partition_configurations.a100.users = greeneSpecialUsers.a100_alpha_test_users
 
 local function candidate_partitions()
    
