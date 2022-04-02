@@ -19,7 +19,9 @@ greeneSpecialUsers.cns_wang_users = { "vg44", "yl4317", "kb3856", "ab9710", "xd4
 greeneSpecialUsers.a100_alpha_test_users = { 
   "wang", "sw77", "deng", "wd35", 
   "gm2724", "aj3281", "jy3694",
-  "fkb2011", "zp489", "ask762", "vm2134", "eo41"
+  "fkb2011", "zp489", "ask762", "vm2134", "eo41",
+  "wjm363", "ap6604",
+  "spf248"
 }
 
 slurm_log("To load greeneSpeicalUsers.lua")
