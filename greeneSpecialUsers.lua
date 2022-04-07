@@ -20,10 +20,12 @@ greeneSpecialUsers.a100_alpha_test_users = {
   "wang", "sw77", "deng", "wd35", 
   "gm2724", "aj3281", "jy3694",
   "fkb2011", "zp489", "ask762", "vm2134", "eo41",
-  "wjm363", "ap6604",
+  "wjm363", "ap6604", "ms7490", "tk3097", "jz3224",
+  "jc11431", "ejp416",
   "spf248"
 }
 
 slurm_log("To load greeneSpeicalUsers.lua")
 
 return greeneSpecialUsers
+
