@@ -21,7 +21,7 @@ greeneSpecialUsers.a100_alpha_test_users = {
   "gm2724", "aj3281", "jy3694",
   "fkb2011", "zp489", "ask762", "vm2134", "eo41",
   "wjm363", "ap6604", "ms7490", "tk3097", "jz3224",
-  "jc11431", "ejp416",
+  "jc11431", "ejp416", "sh6474", "at4524",
   "spf248"
 }
 
