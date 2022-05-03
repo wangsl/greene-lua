@@ -76,9 +76,9 @@ local gpu_configurations = {
   },
 
   a100 = { gpu = "a100",
-	    { gpus = 1, max_cpus = 20, max_memory = 250 },
+	    { gpus = 1, max_cpus = 28, max_memory = 250 },
 	    { gpus = 2, max_cpus = 32, max_memory = 300 },
-	    { gpus = 3, max_cpus = 52, max_memory = 400 },
+	    { gpus = 3, max_cpus = 60, max_memory = 400 },
 	    { gpus = 4, max_cpus = 64, max_memory = 500 }
   }
 }
