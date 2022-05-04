@@ -8,7 +8,7 @@ local slurm_log = greeneUtils.slurm_log
 
 -- data
 
-greeneSpecialUsers.blocked_users = { }
+greeneSpecialUsers.blocked_users = { } 
 
 greeneSpecialUsers.cpuplus_users = { } --"wang", "sw77", "zp2137"
  
@@ -22,7 +22,9 @@ greeneSpecialUsers.a100_alpha_test_users = {
   "fkb2011", "zp489", "ask762", "vm2134", "eo41",
   "wjm363", "ap6604", "ms7490", "tk3097", "jz3224",
   "jc11431", "ejp416", "at4524", "ks4765", "pp1994",
-  "spf248", "og2114", "pfi203"
+  "spf248", "og2114", "pfi203",
+  "wjm363", "pk1822", "sk6876", "pi390", "nvg7270", "sl8160", 
+  "da2963"
 }
 
 slurm_log("To load greeneSpeicalUsers.lua")
