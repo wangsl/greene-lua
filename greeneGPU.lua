@@ -85,7 +85,7 @@ local gpu_configurations = {
   mig = { 
     require_gpu_type = true,
     gpu = "1g.10gb",
-    { gpus = 1, max_cpus = 4, max_memory = 30 }
+    { gpus = 1, max_cpus = 4, max_memory = 64 }
   }
 }
 
@@ -108,7 +108,7 @@ partition_configurations.cds_rtx_d.account = "cds"
 partition_configurations.cds_rtx_a.account = "cds"
 partition_configurations.cds_dgx_d.account = "cds"
 
-partition_configurations.a100.users = greeneSpecialUsers.a100_alpha_test_users
+-- partition_configurations.a100.users = greeneSpecialUsers.a100_alpha_test_users
 
 local function candidate_partitions()
    
