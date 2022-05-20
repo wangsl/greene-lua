@@ -18,68 +18,68 @@ local time_limit = 0
 local available_gpu_types = { "v100", "rtx8000", "a100", "mi50", "1g.10gb" }
 
 -- this is the order to assign partitions
-local partitions = { "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100", "mig" }
+local partitions = { "cds_rtx_d", "cds_dgx_d", "cilvr_a100", "cds_rtx_a", "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100", "mig" }
 
 local account_to_partitions = {
   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
 }
 
 local qos_to_partitions = {
-   cds = { "cds_rtx_d", "cds_dgx_d" }
+  cds = { "cds_rtx_d", "cds_dgx_d" }
 }
 
 local gpu_configurations = {
    
-   v100 = { gpu = "v100",
-	    { gpus = 1, max_cpus = 20, max_memory = 200 },
-	    { gpus = 2, max_cpus = 24, max_memory = 300 },
-	    { gpus = 3, max_cpus = 44, max_memory = 350 },
-	    { gpus = 4, max_cpus = 48, max_memory = 369 }
-   },
+  v100 = { gpu = "v100",
+    { gpus = 1, max_cpus = 20, max_memory = 200 },
+    { gpus = 2, max_cpus = 24, max_memory = 300 },
+    { gpus = 3, max_cpus = 44, max_memory = 350 },
+    { gpus = 4, max_cpus = 48, max_memory = 369 }
+  },
+  
+  rtx8000 = { gpu = "rtx8000",
+    { gpus = 1, max_cpus = 20, max_memory = 200 },
+    { gpus = 2, max_cpus = 24, max_memory = 300 },
+    { gpus = 3, max_cpus = 44, max_memory = 350 },
+    { gpus = 4, max_cpus = 48, max_memory = 369 }
+  },
    
-   rtx8000 = { gpu = "rtx8000",
-	       { gpus = 1, max_cpus = 20, max_memory = 200 },
-	       { gpus = 2, max_cpus = 24, max_memory = 300 },
-	       { gpus = 3, max_cpus = 44, max_memory = 350 },
-	       { gpus = 4, max_cpus = 48, max_memory = 369 }
-   },
-   
-   mi50 = {
-      gpu = "mi50",
-      require_gpu_type = true,
-      { gpus = 1, max_cpus = 48, max_memory = 200 },
-      { gpus = 2, max_cpus = 72, max_memory = 300 },
-      { gpus = 3, max_cpus = 76, max_memory = 350 },
-      { gpus = 4, max_cpus = 80, max_memory = 370 },
-      { gpus = 5, max_cpus = 84, max_memory = 400 },
-      { gpus = 6, max_cpus = 88, max_memory = 430 },
-      { gpus = 7, max_cpus = 92, max_memory = 460 },
-      { gpus = 8, max_cpus = 96, max_memory = 490 }
-   },
-
-   gpu_misc_v100 = { gpu = "v100",
-	    { gpus = 1, max_cpus = 10, max_memory = 200 },
-	    { gpus = 2, max_cpus = 12, max_memory = 300 },
-	    { gpus = 3, max_cpus = 15, max_memory = 350 },
-	    { gpus = 4, max_cpus = 20, max_memory = 369 }
+  mi50 = {
+    gpu = "mi50",
+    require_gpu_type = true,
+    { gpus = 1, max_cpus = 48, max_memory = 200 },
+    { gpus = 2, max_cpus = 72, max_memory = 300 },
+    { gpus = 3, max_cpus = 76, max_memory = 350 },
+    { gpus = 4, max_cpus = 80, max_memory = 370 },
+    { gpus = 5, max_cpus = 84, max_memory = 400 },
+    { gpus = 6, max_cpus = 88, max_memory = 430 },
+    { gpus = 7, max_cpus = 92, max_memory = 460 },
+    { gpus = 8, max_cpus = 96, max_memory = 490 }
   },
 
-   dgx1 = { gpu = "v100",
-	    { gpus = 1, max_cpus = 10,  max_memory = 250 },
-	    { gpus = 2, max_cpus = 15,  max_memory = 300 },
-	    { gpus = 3, max_cpus = 18,  max_memory = 350 },
-	    { gpus = 4, max_cpus = 20,  max_memory = 400 },
-	    { gpus = 5, max_cpus = 30,  max_memory = 425 },
-	    { gpus = 6, max_cpus = 35,  max_memory = 450 },
-	    { gpus = 7, max_cpus = 38,  max_memory = 475 },
-	    { gpus = 8, max_cpus = 40,  max_memory = 500 },
+  gpu_misc_v100 = { gpu = "v100",
+    { gpus = 1, max_cpus = 10, max_memory = 200 },
+    { gpus = 2, max_cpus = 12, max_memory = 300 },
+    { gpus = 3, max_cpus = 15, max_memory = 350 },
+    { gpus = 4, max_cpus = 20, max_memory = 369 }
+  },
+
+  dgx1 = { gpu = "v100",
+    { gpus = 1, max_cpus = 10,  max_memory = 250 },
+    { gpus = 2, max_cpus = 15,  max_memory = 300 },
+    { gpus = 3, max_cpus = 18,  max_memory = 350 },
+    { gpus = 4, max_cpus = 20,  max_memory = 400 },
+    { gpus = 5, max_cpus = 30,  max_memory = 425 },
+    { gpus = 6, max_cpus = 35,  max_memory = 450 },
+    { gpus = 7, max_cpus = 38,  max_memory = 475 },
+    { gpus = 8, max_cpus = 40,  max_memory = 500 },
   },
 
   a100 = { gpu = "a100",
-	    { gpus = 1, max_cpus = 28, max_memory = 250 },
-	    { gpus = 2, max_cpus = 32, max_memory = 300 },
-	    { gpus = 3, max_cpus = 60, max_memory = 400 },
-	    { gpus = 4, max_cpus = 64, max_memory = 500 }
+    { gpus = 1, max_cpus = 28, max_memory = 250 },
+    { gpus = 2, max_cpus = 32, max_memory = 300 },
+    { gpus = 3, max_cpus = 60, max_memory = 400 },
+    { gpus = 4, max_cpus = 64, max_memory = 500 }
   },
 
   mig = { 
@@ -99,16 +99,22 @@ local partition_configurations = {
    cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    cds_dgx_d = greeneUtils.shallow_copy(gpu_configurations.dgx1),
 
+   cilvr_a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
+
    mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
    gpu_misc_v100 = greeneUtils.shallow_copy(gpu_configurations.gpu_misc_v100),
    mig = greeneUtils.shallow_copy(gpu_configurations.mig)
 }
 
-partition_configurations.cds_rtx_d.account = "cds"
-partition_configurations.cds_rtx_a.account = "cds"
-partition_configurations.cds_dgx_d.account = "cds"
+-- partition_configurations.cds_rtx_d.account = "cds"
+-- partition_configurations.cds_rtx_a.account = "cds"
+-- partition_configurations.cds_dgx_d.account = "cds"
 
 -- partition_configurations.a100.users = greeneSpecialUsers.a100_alpha_test_users
+partition_configurations.cilvr_a100.users = greeneSpecialUsers.cilvr_a100_users
+partition_configurations.cds_rtx_d.users = greeneSpecialUsers.cds_users;
+partition_configurations.cds_rtx_a.users = greeneSpecialUsers.cds_users;
+partition_configurations.cds_dgx_d.users = greeneSpecialUsers.cds_users;
 
 local function candidate_partitions()
    
