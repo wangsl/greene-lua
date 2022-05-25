@@ -75,7 +75,7 @@ local partition_configurations = {
 	  max_nodes = 10,
 	  min_memory = 0, max_memory = 180,
 	  min_ave_memory = 0, max_ave_memory = 180, 
-    users = greeneSpecialUsers.chem_gpu0_users
+    users = greeneSpecialUsers.chem_cpu0_users
    }
 }
 

@@ -50,7 +50,7 @@ greeneSpecialUsers.cilvr_a100_users = {
   "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694"
 }
 
-greeneSpecialUsers.chem_gpu0_users = {
+greeneSpecialUsers.chem_cpu0_users = {
   -- Tuckerman (mt33)
   "zl1277", "bp1473", "mt33", "ap6603", "jr4855", "rsh314", "lv37", "mt4320", 
   "tz1005", "ec3688", "ar6138", "mk8347", "drk354", "se55", "bwd223",
