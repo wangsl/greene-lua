@@ -50,6 +50,16 @@ greeneSpecialUsers.cilvr_a100_users = {
   "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694"
 }
 
+greeneSpecialUsers.chem_gpu0_users = {
+  -- Tuckerman (mt33)
+  "zl1277", "bp1473", "mt33", "ap6603", "jr4855", "rsh314", "lv37", "mt4320", 
+  "tz1005", "ec3688", "ar6138", "mk8347", "drk354", "se55", "bwd223",
+  -- Schlick (ts1)
+  "ts1", "cc6533", "azm9134", "sj78", "qz886", "kl4524", "cls9848", 
+  "rg4353", "zl3765", "sp5413", "sy3757", "ats324"
+  -- Bacic(zb2)
+}
+
 slurm_log("To load greeneSpeicalUsers.lua")
 
 return greeneSpecialUsers

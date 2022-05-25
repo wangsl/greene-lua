@@ -21,10 +21,10 @@ local function available_partitions()
   local partitions = nil
   if greeneCommon.is_interactive_job() then
     -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
-    partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu", "mi50" }
+    partitions = { "xwang", "chem_cpu0", "cl", "cm", "cs", "cpu_gpu", "mi50" }
   else
     --partitions = { "cs", "cm", "cl" }
-    partitions = { "xwang", "cl", "cm", "cs", "cpu_gpu" }
+    partitions = { "xwang", "chem_cpu0", "cl", "cm", "cs", "cpu_gpu" }
   end
   return partitions
 end
@@ -70,6 +70,13 @@ local partition_configurations = {
 	  min_ave_memory = 0, max_ave_memory = 180, 
     users = greeneSpecialUsers.cns_wang_users
    },
+
+   chem_cpu0 = { min_cpus = 1, max_cpus = 48,
+	  max_nodes = 10,
+	  min_memory = 0, max_memory = 180,
+	  min_ave_memory = 0, max_ave_memory = 180, 
+    users = greeneSpecialUsers.chem_gpu0_users
+   }
 }
 
 local special_partition_configurations = {
