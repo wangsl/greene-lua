@@ -17,7 +17,8 @@ greeneSpecialUsers.gpuplus_users = { }
 greeneSpecialUsers.cns_wang_users = { "vg44", "yl4317", "kb3856", "ab9710", "xd432" }
 
 greeneSpecialUsers.cds_users = {
-  "ac5968", "ajr348", "amm9935", "amv458", "ark576", "as9934", "ask762", "bm106", "by2026", "ci411", "cz1285", "eo41", "es5223", "gd1279", "hh2291", "ji641", "jk185", "js12196", "jz3786", "kc119", "kl3141", "ml7557", "nk3351", "nt2231", "onm217", "pk1822", "pmh330", "rs8020", "rst306", "sb6065", "sk6876", "sl5924", "sm7582", "us441", "vp1271", "wjm363", "wv9", "wz727", "yf2231", "yz1349", "zp489"
+  "ac5968", "ajr348", "amm9935", "amv458", "ark576", "as9934", "ask762", "bm106", "by2026", "ci411", "cz1285", "eo41", "es5223", "gd1279", "hh2291", "ji641", "jk185", "js12196", "jz3786", "kc119", "kl3141", "ml7557", "nk3351", "nt2231", "onm217", "pk1822", "pmh330", "rs8020", "rst306", "sb6065", "sk6876", "sl5924", "sm7582", "us441", "vp1271", "wjm363", "wv9", "wz727", "yf2231", "yz1349", "zp489",
+  "as17582"
 }
 
 greeneSpecialUsers.cilvr_a100_users = {
@@ -26,7 +27,8 @@ greeneSpecialUsers.cilvr_a100_users = {
   "bl1611", "bne215", "dm5182", "eo41", "hh2291", "jb4496", "jc11431", 
   "lp91", "map22", "mr3182", "nk3351", "nms572", "nxb2314", 
   "rdf7", "rhr246", "rs4070", "rst306", 
-  "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694"
+  "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694",
+  "sa5914"
 }
 
 greeneSpecialUsers.chem_cpu0_users = {

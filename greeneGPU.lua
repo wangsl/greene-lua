@@ -85,7 +85,7 @@ local gpu_configurations = {
   mig = { 
     require_gpu_type = true,
     gpu = "1g.10gb",
-    { gpus = 1, max_cpus = 4, max_memory = 64 }
+    { gpus = 1, max_cpus = 8, max_memory = 64 }
   }
 }
 
