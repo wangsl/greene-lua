@@ -39,7 +39,7 @@ greeneSpecialUsers.chem_cpu0_users = {
   "ts1", "cc6533", "azm9134", "sj78", "qz886", "kl4524", "cls9848", 
   "rg4353", "zl3765", "sp5413", "sy3757", "ats324",
   -- Bacic(zb2)
-  "mx2000"
+  "mx200"
 }
 
 slurm_log("To load greeneSpeicalUsers.lua")
