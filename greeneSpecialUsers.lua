@@ -28,7 +28,7 @@ greeneSpecialUsers.cilvr_a100_users = {
   "lp91", "map22", "mr3182", "nk3351", "nms572", "nxb2314", 
   "rdf7", "rhr246", "rs4070", "rst306", 
   "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694",
-  "sa5914"
+  "sa5914", "yp883", "as17582"
 }
 
 greeneSpecialUsers.chem_cpu0_users = {
@@ -37,8 +37,9 @@ greeneSpecialUsers.chem_cpu0_users = {
   "tz1005", "ec3688", "ar6138", "mk8347", "drk354", "se55", "bwd223",
   -- Schlick (ts1)
   "ts1", "cc6533", "azm9134", "sj78", "qz886", "kl4524", "cls9848", 
-  "rg4353", "zl3765", "sp5413", "sy3757", "ats324"
+  "rg4353", "zl3765", "sp5413", "sy3757", "ats324",
   -- Bacic(zb2)
+  "mx2000"
 }
 
 slurm_log("To load greeneSpeicalUsers.lua")

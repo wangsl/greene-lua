@@ -18,7 +18,9 @@ local time_limit = 0
 local available_gpu_types = { "v100", "rtx8000", "a100", "mi50", "1g.10gb" }
 
 -- this is the order to assign partitions
-local partitions = { "cds_rtx_d", "cds_dgx_d", "cilvr_a100", "cds_rtx_a", "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100", "mig" }
+local partitions = { 
+  "cds_rtx_d", "cds_dgx_d", "cilvr_a100", "cds_rtx_a", 
+  "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100", "mig" }
 
 local account_to_partitions = {
   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
