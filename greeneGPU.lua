@@ -20,7 +20,8 @@ local available_gpu_types = { "v100", "rtx8000", "a100", "mi50", "1g.10gb" }
 -- this is the order to assign partitions
 local partitions = { 
   "cds_rtx_d", "cds_dgx_d", "cilvr_a100", "cds_rtx_a", 
-  "rtx8000", "v100", "a100", "mi50", "gpu_misc_v100", "mig" }
+  "rtx8000", "v100", "a100_1", "a100_2", "gpu_misc_v100", 
+  "mig", "mi50" }
 
 local account_to_partitions = {
   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
@@ -84,6 +85,20 @@ local gpu_configurations = {
     { gpus = 4, max_cpus = 64, max_memory = 500 }
   },
 
+  a100_1 = { gpu = "a100",
+    { gpus = 1, max_cpus = 28, max_memory = 250 },
+    { gpus = 2, max_cpus = 32, max_memory = 300 },
+    { gpus = 3, max_cpus = 60, max_memory = 400 },
+    { gpus = 4, max_cpus = 64, max_memory = 500 }
+  },
+
+  a100_2 = { gpu = "a100",
+    { gpus = 1, max_cpus = 28, max_memory = 250 },
+    { gpus = 2, max_cpus = 32, max_memory = 300 },
+    { gpus = 3, max_cpus = 60, max_memory = 400 },
+    { gpus = 4, max_cpus = 64, max_memory = 500 }
+  },
+
   mig = { 
     require_gpu_type = true,
     gpu = "1g.10gb",
@@ -95,13 +110,15 @@ local partition_configurations = {
    
    v100 = greeneUtils.shallow_copy(gpu_configurations.v100),
    rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
-   a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
+   --a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
+   a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+   a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
    
    cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
    cds_dgx_d = greeneUtils.shallow_copy(gpu_configurations.dgx1),
 
-   cilvr_a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
+   cilvr_a100 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
 
    mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
    gpu_misc_v100 = greeneUtils.shallow_copy(gpu_configurations.gpu_misc_v100),

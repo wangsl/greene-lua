@@ -10,15 +10,29 @@ local slurm_log = greeneUtils.slurm_log
 
 greeneSpecialUsers.blocked_users = { } 
 
-greeneSpecialUsers.cpuplus_users = { } --"wang", "sw77", "zp2137"
+greeneSpecialUsers.cpuplus_users = { } -- "wang", "sw77", "zp2137"
  
 greeneSpecialUsers.gpuplus_users = { }
 
 greeneSpecialUsers.cns_wang_users = { "vg44", "yl4317", "kb3856", "ab9710", "xd432" }
 
 greeneSpecialUsers.cds_users = {
-  "ac5968", "ajr348", "amm9935", "amv458", "ark576", "as9934", "ask762", "bm106", "by2026", "ci411", "cz1285", "eo41", "es5223", "gd1279", "hh2291", "ji641", "jk185", "js12196", "jz3786", "kc119", "kl3141", "ml7557", "nk3351", "nt2231", "onm217", "pk1822", "pmh330", "rs8020", "rst306", "sb6065", "sk6876", "sl5924", "sm7582", "us441", "vp1271", "wjm363", "wv9", "wz727", "yf2231", "yz1349", "zp489",
-  "as17582"
+  "aa9774", "ac5968", "agc9824", "ajr348", "amm9935", "amv458", 
+  "ap6599", "ap6604", "ark576", "as17582", "as9934", "ask762", 
+  "aw130", "ayl316", "bl1611", "bm106", "bm3418", "by2026", 
+  "cfg3", "ci411", "cl5043", "cs5360", "csg337", "cz1285", 
+  "ddr8143", "ec1302", "eo41", "fa2161", "gd1279", "gm3239", "gn523", "gw2180", 
+  "hh2291", "hrr288", "hs3673", "idr2823", "iem244", 
+  "ja4775", "jb4496", "jc3832", "jds405", "jdw453", "ji641", "jk185", "jm10082", 
+  "jp6263", "js12196", "jz3786",
+  "kc119", "ke2129", "kl3141", "kve216", "leb9763", "lhz209", "lyj2002", 
+  "mat9360", "mg7285", "mkh260", "ml7557", "mm7936", "mmb557", "mr3182", "myh2014", 
+  "nk3351", "nn1119", "ns4008", "nt2231", "nw1045", "pk1822", "pw44", 
+  "ql518", "rhr246", "rs8020", "rst306", "sb6065", "sh7354", 
+  "sk6876", "sl5924", "sl8160", "sm11197", "sm8523", 
+  "tch362", "tl876", "tm1178", "tr2432", "us441", "vd2185", "vka244", 
+  "vp1271", "waf251", "wcm9940", "wh992", "wl1566", "wv9", "wz2247", 
+  "wz727", "yf2231", "ys1001", "yx2105", "yz1349", "zk388", "zp489", "zz1706"
 }
 
 greeneSpecialUsers.cilvr_a100_users = {
@@ -28,7 +42,7 @@ greeneSpecialUsers.cilvr_a100_users = {
   "lp91", "map22", "mr3182", "nk3351", "nms572", "nxb2314", 
   "rdf7", "rhr246", "rs4070", "rst306", 
   "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694",
-  "sa5914", "yp883", "as17582"
+  "sa5914", "yp883", "as17582", "nm1874", "mag1038", "tm3647"
 }
 
 greeneSpecialUsers.chem_cpu0_users = {
