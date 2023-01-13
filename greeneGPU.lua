@@ -15,13 +15,19 @@ local memory = 0
 local gpu_type = nil
 local time_limit = 0
 
-local available_gpu_types = { "v100", "rtx8000", "a100", "mi50", "1g.10gb" }
+local available_gpu_types = { "v100", "rtx8000", "a100", "mi50" }
 
 -- this is the order to assign partitions
 local partitions = { 
-  "cds_rtx_d", "cds_dgx_d", "cilvr_a100", "cds_rtx_a", 
-  "rtx8000", "v100", "a100_1", "a100_2", "gpu_misc_v100", 
-  "mig", "mi50" }
+  "cds_rtx_d", "cds_rtx_a", "cds_dgx_d",
+  "cilvr_a100_1", 
+  "cds_a100_2", 
+  "chemistry_a100_2", 
+  "tandon_a100_2", "tandon_a100_1",
+  "stake_a100_2", "stake_a100_1",
+  "rtx8000", "v100", "a100_2", "a100_1", "gpu_misc_v100", 
+  "mi50" 
+}
 
 local account_to_partitions = {
   cds = { "cds_rtx_d", "cds_dgx_d", "cds_rtx_a", "v100" }
@@ -99,30 +105,40 @@ local gpu_configurations = {
     { gpus = 4, max_cpus = 64, max_memory = 500 }
   },
 
+  --[[
   mig = { 
     require_gpu_type = true,
     gpu = "1g.10gb",
     { gpus = 1, max_cpus = 8, max_memory = 64 }
   }
+  ]]
 }
 
 local partition_configurations = {
    
-   v100 = greeneUtils.shallow_copy(gpu_configurations.v100),
-   rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
-   --a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
-   a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
-   a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
-   
-   cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
-   cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
-   cds_dgx_d = greeneUtils.shallow_copy(gpu_configurations.dgx1),
+  v100 = greeneUtils.shallow_copy(gpu_configurations.v100),
+  rtx8000 = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+  --a100 = greeneUtils.shallow_copy(gpu_configurations.a100),
+  
+  cds_rtx_d = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+  cds_rtx_a = greeneUtils.shallow_copy(gpu_configurations.rtx8000),
+  cds_dgx_d = greeneUtils.shallow_copy(gpu_configurations.dgx1),
 
-   cilvr_a100 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  -- cilvr_a100 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  cilvr_a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  tandon_a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  stake_a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  a100_1 = greeneUtils.shallow_copy(gpu_configurations.a100_1),
+  
+  cds_a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
+  tandon_a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
+  chemistry_a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
+  stake_a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),  
+  a100_2 = greeneUtils.shallow_copy(gpu_configurations.a100_2),
 
-   mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
-   gpu_misc_v100 = greeneUtils.shallow_copy(gpu_configurations.gpu_misc_v100),
-   mig = greeneUtils.shallow_copy(gpu_configurations.mig)
+  mi50 = greeneUtils.shallow_copy(gpu_configurations.mi50),
+  gpu_misc_v100 = greeneUtils.shallow_copy(gpu_configurations.gpu_misc_v100),
+   -- mig = greeneUtils.shallow_copy(gpu_configurations.mig)
 }
 
 -- partition_configurations.cds_rtx_d.account = "cds"
@@ -130,110 +146,119 @@ local partition_configurations = {
 -- partition_configurations.cds_dgx_d.account = "cds"
 
 -- partition_configurations.a100.users = greeneSpecialUsers.a100_alpha_test_users
-partition_configurations.cilvr_a100.users = greeneSpecialUsers.cilvr_a100_users
 partition_configurations.cds_rtx_d.users = greeneSpecialUsers.cds_users;
 partition_configurations.cds_rtx_a.users = greeneSpecialUsers.cds_users;
 partition_configurations.cds_dgx_d.users = greeneSpecialUsers.cds_users;
 
+-- partition_configurations.cilvr_a100.users = greeneSpecialUsers.cilvr_a100_users;
+partition_configurations.cilvr_a100_1.users = greeneSpecialUsers.cilvr_a100_users;
+partition_configurations.tandon_a100_1.users = greeneSpecialUsers.tandon_a100_2_users;
+partition_configurations.stake_a100_1.users = greeneSpecialUsers.stakeholders_a100_users;
+
+partition_configurations.cds_a100_2.users = greeneSpecialUsers.cds_users;
+partition_configurations.tandon_a100_2.users = greeneSpecialUsers.tandon_a100_2_users;
+partition_configurations.chemistry_a100_2.users = greeneSpecialUsers.chemistry_a100_2_users;
+partition_configurations.stake_a100_2.users = greeneSpecialUsers.stakeholders_a100_users;
+
 local function candidate_partitions()
    
-   local partitions_ = nil
+  local partitions_ = nil
 
-   local account_partitions = nil
-   if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
-      account_partitions = account_to_partitions[greeneCommon.account()]
-   end
+  local account_partitions = nil
+  if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
+    account_partitions = account_to_partitions[greeneCommon.account()]
+  end
    
-   local qos_partitions = nil
-   if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
-      qos_partitions = qos_to_partitions[greeneCommon.qos()]
-   end
+  local qos_partitions = nil
+  if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
+    qos_partitions = qos_to_partitions[greeneCommon.qos()]
+  end
 
-   if qos_partitions ~= nil then
-      partitions_ = qos_partitions
-   elseif account_partitions ~= nil then
-      partitions_ = account_partitions
-   else
-      partitions_ = partitions
-   end
+  if qos_partitions ~= nil then
+    partitions_ = qos_partitions
+  elseif account_partitions ~= nil then
+    partitions_ = account_partitions
+  else
+    partitions_ = partitions
+  end
 
-   return partitions_
+  return partitions_
 end
 
 local function fit_into_partition_based_on_account_and_qos(part_name)
 
-   if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
-      local account_partitions = account_to_partitions[greeneCommon.account()]
-      if not greeneUtils.in_table(account_partitions, part_name) then return false end
-   end
+  if greeneCommon.account() ~= nil and account_to_partitions[greeneCommon.account()] ~= nil then
+    local account_partitions = account_to_partitions[greeneCommon.account()]
+    if not greeneUtils.in_table(account_partitions, part_name) then return false end
+  end
 
-   if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
-      local qos_partitions = qos_to_partitions[greeneCommon.qos()]
-      if not greeneUtils.in_table(qos_partitions, part_name) then return false end
-   end
+  if greeneCommon.qos() ~= nil and qos_to_partitions[greeneCommon.qos()] ~= nil then
+    local qos_partitions = qos_to_partitions[greeneCommon.qos()]
+    if not greeneUtils.in_table(qos_partitions, part_name) then return false end
+  end
 
-   return true
+  return true
 end
 
 local function gpu_type_is_valid()
-   if gpu_type == nil then return true end
-   
-   if greeneUtils.in_table(available_gpu_types, gpu_type) then
-      return true
-   else
-      user_log("*** Error: GPU type '%s' is invalid", gpu_type)
-      return false
-   end
+  if gpu_type == nil then return true end
+  
+  if greeneUtils.in_table(available_gpu_types, gpu_type) then
+    return true
+  else
+    user_log("*** Error: GPU type '%s' is invalid", gpu_type)
+    return false
+  end
 end
 
 local function number_of_cpus_is_ge_than_number_of_gpus()
-   if cpus >= gpus then
-      return true
-   else
-      user_log("*** Error: GPU number %d is bigger than CPU number %d", gpus, cpus)
-      return false
-   end
+  if cpus >= gpus then
+    return true
+  else
+    user_log("*** Error: GPU number %d is bigger than CPU number %d", gpus, cpus)
+    return false
+  end
 end
 
 local function fit_into_partition(part_name)
 
-   if not fit_into_partition_based_on_account_and_qos(part_name) then return false end
+  if not fit_into_partition_based_on_account_and_qos(part_name) then return false end
+  
+  local partition_conf = partition_configurations[part_name]
+
+  if partition_conf == nil then return false end
+
+  if partition_conf.require_gpu_type and gpu_type ~= partition_conf.gpu then return false end
+  
+  if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
+
+  if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
+  return false
+  end
    
-   local partition_conf = partition_configurations[part_name]
+  if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
 
-   if partition_conf == nil then return false end
+  if partition_conf.account ~= nil and partition_conf.account ~= greeneCommon.account() then return false end
 
-   if partition_conf.require_gpu_type and gpu_type ~= partition_conf.gpu then return false end
-   
-   if gpu_type ~= nil and gpu_type ~= partition_conf.gpu then return false end
+  local conf = partition_conf[gpus]
+  if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then return true end
 
-   if partition_conf.users ~= nil and not greeneUtils.in_table(partition_conf.users, greeneCommon.netid()) then
-    return false
-   end
-   
-   if partition_conf.time_limit ~= nil and time_limit > partition_conf.time_limit then return false end
-
-   if partition_conf.account ~= nil and partition_conf.account ~= greeneCommon.account() then return false end
-
-   local conf = partition_conf[gpus]
-   if conf ~= nil and cpus <= conf.max_cpus and memory <= conf.max_memory then return true end
-
-   return false
+  return false
 end
 
 local function valid_partitions()
-   local partitions_ = nil
-   --for _, part_name in pairs(partitions) do
-   for _, part_name in pairs(candidate_partitions()) do
-      if fit_into_partition(part_name) then
-	 if partitions_ == nil then
-	    partitions_ = part_name
-	 else
-	    partitions_ = partitions_ .. "," .. part_name
-	 end
-      end
-   end
-   return partitions_
+  local partitions_ = nil
+  --for _, part_name in pairs(partitions) do
+  for _, part_name in pairs(candidate_partitions()) do
+    if fit_into_partition(part_name) then
+  if partitions_ == nil then
+    partitions_ = part_name
+  else
+    partitions_ = partitions_ .. "," .. part_name
+  end
+    end
+  end
+  return partitions_
 end
 
 local function partitions_are_valid()
@@ -266,11 +291,11 @@ local function setup_is_valid()
 end
 
 local function setup_parameters(args)
-   gpus = args.gpus 
-   cpus = args.cpus 
-   memory = args.memory
-   gpu_type = args.gpu_type 
-   time_limit = args.time_limit
+  gpus = args.gpus 
+  cpus = args.cpus 
+  memory = args.memory
+  gpu_type = args.gpu_type 
+  time_limit = args.time_limit
 end
 
 -- functions

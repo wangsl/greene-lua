@@ -18,64 +18,71 @@ local unlimited_time = 525600 -- one year in mins
 local maintenance_mode = false
 
 local function mins_to_days(mins)
-   return mins/60/24
+  return mins/60/24
 end
 
 local function hours_to_mins(h)
-   return h*60
+  return h*60
 end
 
 local function split(s, delimiter)
-   local result = {}
-   for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-      table.insert(result, match)
-   end
-   return result
+  local result = {}
+  for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+    table.insert(result, match)
+  end
+  return result
 end
 
 local function in_table(tbl, item)
-   for _, value in pairs(tbl) do
-      if value == item then return true end
-   end
-   return false
+  for _, value in pairs(tbl) do
+    if value == item then return true end
+  end
+  return false
 end
 
 local function insert_to_table_if_not_exist(tbl, item)
-   if not in_table(tbl, item) then table.insert(tbl, item) end
+  if not in_table(tbl, item) then table.insert(tbl, item) end
 end
 
 local function is_empty(t)
-   for _, _ in pairs(t) do return false end
-   return true
+  for _, _ in pairs(t) do return false end
+  return true
+end
+
+local function table_concat(t1, t2)
+  for i=1, #t2 do
+    t1[#t1+1] = t2[i]
+  end
+  return t1
 end
 
 local function slurm_log(s, ...)
-   return io.write(s:format(...), "\n")
+  return io.write(s:format(...), "\n")
 end
 
 local function print_NO_VALs()
-   slurm.log_info("uint16_NO_AVL: %d", uint16_NO_VAL)
-   slurm.log_info("uint32_NO_AVL: %d", uint32_NO_VAL) 
-   -- slurm.log_info("uint64_NO_AVL: %d", uint64_NO_VAL)
+  slurm.log_info("uint16_NO_AVL: %d", uint16_NO_VAL)
+  slurm.log_info("uint32_NO_AVL: %d", uint32_NO_VAL) 
+  -- slurm.log_info("uint64_NO_AVL: %d", uint64_NO_VAL)
 end
 
 local function shallow_copy(original)
-   local copy = {}
-   for key, value in pairs(original) do
-      copy[key] = value
-   end
-   return copy
+  local copy = {}
+  for key, value in pairs(original) do
+    copy[key] = value
+  end
+  return copy
 end
 
 local function deep_copy(original)
-   local copy = {}
-   for k, v in pairs(original) do
-      if type(v) == "table" then
-	 v = deep_copy(v)
-      end
-      copy[k] = v
-   end
-   return copy
+  local copy = {}
+  for k, v in pairs(original) do
+    if type(v) == "table" then
+  v = deep_copy(v)
+    end
+    copy[k] = v
+  end
+  return copy
 end
 
 -- functions
@@ -86,6 +93,7 @@ greeneUtils.insert_to_table_if_not_exist = insert_to_table_if_not_exist
 greeneUtils.is_empty = is_empty
 greeneUtils.shallow_copy = shallow_copy
 greeneUtils.deep_copy = deep_copy
+greeneUtils.table_concat = table_concat
 
 greeneUtils.mins_to_days = mins_to_days
 greeneUtils.hours_to_mins = hours_to_mins
@@ -117,4 +125,3 @@ greeneUtils.print_NO_VALs = print_NO_VALs
 greeneUtils.slurm_log("To load greeneUtils.lua")
 
 return greeneUtils
-

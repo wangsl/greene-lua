@@ -18,113 +18,113 @@ local gpu_type = nil
 local gpus = 0
 
 local function gres_for_gpu(gres)
-   gpu_type = nil
-   gpus = 0
-   
-   local tmp = greeneUtils.split(gres, ":")
-   
-   if tmp[1] == "gpu" then
-      if #tmp > 3 then
-         gpus = 0
-         gpu_type = nil
-      elseif #tmp == 3 then
-         gpu_type = tmp[2]
-         gpus = tmp[3]
-      elseif #tmp == 2 then
-         if tmp[2]:match("^%d+$") then
-            gpus = tmp[2]
-            gpu_type = nil
-         else
-            gpus = 1
-            gpu_type = tmp[2]
-         end
-      elseif #tmp == 1 then
-            gpus = 1
-            gpu_type = nil
-      end
-   else
+  gpu_type = nil
+  gpus = 0
+  
+  local tmp = greeneUtils.split(gres, ":")
+  
+  if tmp[1] == "gpu" then
+    if #tmp > 3 then
+      gpus = 0
       gpu_type = nil
-      gpus = nil
-      user_log("GPU gres '%s' error", gres)
-   end
+    elseif #tmp == 3 then
+      gpu_type = tmp[2]
+      gpus = tmp[3]
+    elseif #tmp == 2 then
+      if tmp[2]:match("^%d+$") then
+        gpus = tmp[2]
+        gpu_type = nil
+      else
+        gpus = 1
+        gpu_type = tmp[2]
+      end
+    elseif #tmp == 1 then
+      gpus = 1
+      gpu_type = nil
+    end
+  else
+    gpu_type = nil
+    gpus = nil
+    user_log("GPU gres '%s' error", gres)
+  end
 
-   if gpus ~= nil then gpus = tonumber(gpus) end
+  if gpus ~= nil then gpus = tonumber(gpus) end
 end
 
 local function is_interactive_job()
-   if job_desc.script == nil then
-      return true
-   else
-      return false
-   end
+  if job_desc.script == nil then
+    return true
+  else
+    return false
+  end
 end
 
 local function is_gpu_job()
-   if gpus > 0 then
-      return true
-   else
-      return false
-   end
+  if gpus > 0 then
+    return true
+  else
+    return false
+  end
 end
 
 local function netid()
-   return job_desc.user_name
+  return job_desc.user_name
 end
 
 local function account()
-   return job_desc.account
+  return job_desc.account
 end
 
 local function qos()
-   return job_desc.qos
+  return job_desc.qos
 end
 
 local function partition()
-   return job_desc.partition
+  return job_desc.partition
 end
 
 local function user_is_blocked(netid)
-   local blocked_users = greeneSpecialUsers.blocked_users
-   if #blocked_users > 0 and greeneUtils.in_table(blocked_users, netid) then
-      slurm_log("user %s is blocked to submit jobs", netid)
-      user_log("*** Error: user '%s' is not allowed to submit jobs now, please contact hpc@nyu.edu for help", netid)
-      return true
-   end
-   return false
+  local blocked_users = greeneSpecialUsers.blocked_users
+  if #blocked_users > 0 and greeneUtils.in_table(blocked_users, netid) then
+    slurm_log("user %s is blocked to submit jobs", netid)
+    user_log("*** Error: user '%s' is not allowed to submit jobs now, please contact hpc@nyu.edu for help", netid)
+    return true
+  end
+  return false
 end
 
 local function total_cpus_and_gpus()
-   local n_cpus = 0
-   local n_gpus = 0
+  local n_cpus = 0
+  local n_gpus = 0
 
-   if job_desc.num_tasks ~= uint32_NO_VAL then
-      n_cpus = job_desc.cpus_per_task * job_desc.num_tasks
-   else
-      n_cpus = job_desc.cpus_per_task * job_desc.ntasks_per_node * job_desc.min_nodes
-   end
+  if job_desc.num_tasks ~= uint32_NO_VAL then
+    n_cpus = job_desc.cpus_per_task * job_desc.num_tasks
+  else
+    n_cpus = job_desc.cpus_per_task * job_desc.ntasks_per_node * job_desc.min_nodes
+  end
 
-   if gpus > 0 then
-      n_gpus = gpus * job_desc.min_nodes
-   end
-   
-   return n_cpus, n_gpus
+  if gpus > 0 then
+    n_gpus = gpus * job_desc.min_nodes
+  end
+  
+  return n_cpus, n_gpus
 end
 
 local function setup_parameters(args)
-   job_desc = args.job_desc
-   -- if job_desc.gres ~= nil then
-   --    gres_for_gpu(job_desc.gres)
-   if job_desc.gres ~= nil and 
-      (string.match(job_desc.gres, "^gres:gpu") or string.match(job_desc.gres, "^gpu")) then
-         gres_for_gpu(job_desc.gres:gsub("^gres:", ""))
-   else
-      gpu_type = nil
-      gpus = 0
-   end
+  job_desc = args.job_desc
+  -- if job_desc.gres ~= nil then
+  --    gres_for_gpu(job_desc.gres)
+  if job_desc.gres ~= nil and 
+    (string.match(job_desc.gres, "^gres:gpu") or string.match(job_desc.gres, "^gpu")) then
+        gres_for_gpu(job_desc.gres:gsub("^gres:", ""))
+  else
+    gpu_type = nil
+    gpus = 0
+  end
 
-   greeneCommon.job_desc = job_desc
-   greeneCommon.gpus = gpus
-   greeneCommon.gpu_type = gpu_type
+  greeneCommon.job_desc = job_desc
+  greeneCommon.gpus = gpus
+  greeneCommon.gpu_type = gpu_type
 end
 
 -- functions
@@ -141,5 +141,3 @@ greeneCommon.partition = partition
 slurm_log("To load greeneCommon.lua")
 
 return greeneCommon
-
-

@@ -40,7 +40,7 @@ local function setup_parameters(args)
 
   -- GPU job
   if greeneCommon.is_gpu_job() then
-    
+
     greeneGPU.setup_parameters{ gpus = greeneCommon.gpus,
       cpus = n_cpus_per_node,
       memory = job_desc.pn_min_memory/1024.0,
@@ -53,6 +53,9 @@ local function setup_parameters(args)
     end
     
   else -- CPU only jobs
+    -- For CPU only jobs, we will set threads_per_core = 1
+    if job_desc.threads_per_core == uint16_NO_VAL then job_desc.threads_per_core = 1 end
+
     greeneCPU.setup_parameters{ cpus = n_cpus_per_node,
       memory = job_desc.pn_min_memory/1024.0,
       nodes = job_desc.min_nodes,
@@ -103,23 +106,25 @@ end
 
 local function print_job_desc()
 
-   slurm_log("*** ==== SLURM job desc ==== ***")
+  slurm_log("*** ==== SLURM job desc ==== ***")
 
-   if job_desc.user_name ~= nil then slurm_log("user: %s", job_desc.user_name) end
+  if job_desc.threads_per_core ~= nil then slurm_log("threads_per_core: %d", job_desc.threads_per_core) end
 
-   if job_desc.account ~= nil then slurm_log("account: %s", job_desc.account) end
+  if job_desc.user_name ~= nil then slurm_log("user: %s", job_desc.user_name) end
 
-   if job_desc.partition ~= nil then slurm_log("partitions: %s", job_desc.partition) end
-   
-   if job_desc.qos ~= nil then slurm_log("qos: %s", job_desc.qos) end
-   
-   if job_desc.features ~= nil then slurm_log("features: %s", job_desc.features) end
+  if job_desc.account ~= nil then slurm_log("account: %s", job_desc.account) end
 
-   if job_desc.default_account ~= nil then slurm_log("default_account: %s", job_desc.default_account) end
+  if job_desc.partition ~= nil then slurm_log("partitions: %s", job_desc.partition) end
+  
+  if job_desc.qos ~= nil then slurm_log("qos: %s", job_desc.qos) end
+  
+  if job_desc.features ~= nil then slurm_log("features: %s", job_desc.features) end
 
-   if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
+  if job_desc.default_account ~= nil then slurm_log("default_account: %s", job_desc.default_account) end
 
-   if job_desc.comment ~= nil then slurm_log("comment: %s", job_desc.comment) end
+  if job_desc.work_dir ~= nil then slurm_log("work dir: %s", job_desc.work_dir) end
+
+  if job_desc.comment ~= nil then slurm_log("comment: %s", job_desc.comment) end
 
    if job_desc.argc > 0 then
       local argv = job_desc.argv[0]
@@ -181,6 +186,8 @@ function setup_default_compute_resources()
   if job_desc.pn_min_cpus == uint16_NO_VAL then job_desc.pn_min_cpus = 1 end
   
   if job_desc.ntasks_per_node == uint16_NO_VAL then job_desc.ntasks_per_node = 1 end
+
+  -- if job_desc.threads_per_core == uint16_NO_VAL then job_desc.threads_per_core = 1 end
   
   n_cpus_per_node = job_desc.ntasks_per_node * job_desc.cpus_per_task
   
@@ -190,9 +197,9 @@ function setup_default_compute_resources()
   
   if not memory_is_specified(job_desc.pn_min_memory) then
     if memory_is_specified(job_desc.min_mem_per_cpu) then
-  job_desc.pn_min_memory = job_desc.min_mem_per_cpu
+      job_desc.pn_min_memory = job_desc.min_mem_per_cpu
     else
-  job_desc.pn_min_memory = 2048
+      job_desc.pn_min_memory = 2048
     end
   end
 end

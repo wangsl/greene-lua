@@ -4,6 +4,8 @@ local greeneSpecialUsers = {}
 
 local greeneUtils = require "greeneUtils"
 
+local table_concat = greeneUtils.table_concat
+
 local slurm_log = greeneUtils.slurm_log
 
 -- data
@@ -32,7 +34,8 @@ greeneSpecialUsers.cds_users = {
   "sk6876", "sl5924", "sl8160", "sm11197", "sm8523", 
   "tch362", "tl876", "tm1178", "tr2432", "us441", "vd2185", "vka244", 
   "vp1271", "waf251", "wcm9940", "wh992", "wl1566", "wv9", "wz2247", 
-  "wz727", "yf2231", "ys1001", "yx2105", "yz1349", "zk388", "zp489", "zz1706"
+  "wz727", "yf2231", "ys1001", "yx2105", "yz1349", "zk388", "zp489", "zz1706",
+  "yc5830"
 }
 
 greeneSpecialUsers.cilvr_a100_users = {
@@ -55,6 +58,23 @@ greeneSpecialUsers.chem_cpu0_users = {
   -- Bacic(zb2)
   "mx200"
 }
+
+greeneSpecialUsers.tandon_a100_2_users = { "mr6852",
+ -- PI Chinmay Hegde
+ "bf996", "aaj458", "mp5847", "ntl2689", "gm2724", "km38888", "at4932",
+ -- Nasir Memon
+ "aj3281", "jy3694"
+}
+
+greeneSpecialUsers.chemistry_a100_2_users = { "gmh4", "sx801", "gm2535", "zl3765", "wang" }
+
+local stakeholders_a100_users = {} 
+stakeholders_a100_users = table_concat(stakeholders_a100_users, greeneSpecialUsers.cds_users)
+stakeholders_a100_users = table_concat(stakeholders_a100_users, greeneSpecialUsers.cilvr_a100_users)
+stakeholders_a100_users = table_concat(stakeholders_a100_users, greeneSpecialUsers.tandon_a100_2_users)
+stakeholders_a100_users = table_concat(stakeholders_a100_users, greeneSpecialUsers.chemistry_a100_2_users)
+
+greeneSpecialUsers.stakeholders_a100_users = stakeholders_a100_users
 
 slurm_log("To load greeneSpeicalUsers.lua")
 

@@ -55,5 +55,3 @@ slurm_log("To load greene.lua")
 
 return greene
 
-
-
