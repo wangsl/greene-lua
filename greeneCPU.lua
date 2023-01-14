@@ -20,70 +20,75 @@ local ave_memory = 0
 local function available_partitions()
   local partitions = nil
   if greeneCommon.is_interactive_job() then
-    -- partitions = { "cs", "cm", "cpu_gpu", "cl" }
-    partitions = { "xwang", "chem_cpu0", "cl", "cm", "cs", "cpu_gpu", "cpu_a100_2", "mi50" }
+    partitions = { "xwang", "chem_cpu0", "cs", "cm", "cpu_a100_2", "cpu_a100_1", "cpu_gpu", "cl", "mi50" }
   else
-    --partitions = { "cs", "cm", "cl" }
-    partitions = { "xwang", "chem_cpu0", "cl", "cm", "cs", "cpu_gpu" }
+    partitions = { "xwang", "chem_cpu0", "cl", "cm", "cs", "cpu_a100_2", "cpu_gpu" }
   end
   return partitions
 end
 
 local partition_configurations = {
 
-   cs = { min_cpus = 1, max_cpus = 48,
-	  max_nodes = 524,
-	  min_memory = 0, max_memory = 180,
-	  min_ave_memory = 0, max_ave_memory = 16, 
-   },
-   
-   cm = { min_cpus = 1, max_cpus = 48,
-	  max_nodes = 40,
-	  min_memory = 10, max_memory = 369,
-	  min_ave_memory = 4, max_ave_memory = 64
-   },
-   
-   cl = { min_cpus = 1, max_cpus = 96,
-	  max_nodes = 4,
-	  min_memory = 40, max_memory = 3014,
-	  min_ave_memory = 10, max_ave_memory = 3014
-   },
-   
-   cpu_gpu = { min_cpus = 1, max_cpus = 20,
+  cs = { min_cpus = 1, max_cpus = 48,
+    max_nodes = 524,
+    min_memory = 0, max_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 16, 
+  },
+  
+  cm = { min_cpus = 1, max_cpus = 48,
+    max_nodes = 40,
+    min_memory = 10, max_memory = 369,
+    min_ave_memory = 4, max_ave_memory = 64
+  },
+  
+  cl = { min_cpus = 1, max_cpus = 96,
+    max_nodes = 4,
+    min_memory = 40, max_memory = 3014,
+    min_ave_memory = 10, max_ave_memory = 3014
+  },
+  
+  cpu_gpu = { min_cpus = 1, max_cpus = 20,
     max_nodes = 2,
     min_memory = 0, max_memory = 180,
     min_ave_memory = 0, max_ave_memory = 180,
     time_limit = greeneUtils.hours_to_mins(4)
-   },
+  },
 
-   mi50 = { min_cpus = 1, max_cpus = 48,
+  mi50 = { min_cpus = 1, max_cpus = 48,
     max_nodes = 20,
     min_memory = 0, max_memory = 180,
     min_ave_memory = 0, max_ave_memory = 180,
     time_limit = greeneUtils.hours_to_mins(48),
     require_partition = true
-   },
+  },
 
-   cpu_a100_2 = { min_cpus = 1, max_cpus = 64,
+  cpu_a100_1 = { min_cpus = 1, max_cpus = 16,
+    max_nodes = 4,
+    min_memory = 0, max_memory = 200,
+    min_ave_memory = 0, max_ave_memory = 60,
+    time_limit = greeneUtils.hours_to_mins(4),
+  },
+
+  cpu_a100_2 = { min_cpus = 1, max_cpus = 64,
     max_nodes = 20,
     min_memory = 0, max_memory = 500,
-    min_ave_memory = 0, max_ave_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 120,
     time_limit = greeneUtils.hours_to_mins(4),
-   },
+  },
 
   xwang = { min_cpus = 1, max_cpus = 48,
-	  max_nodes = 10,
-	  min_memory = 0, max_memory = 180,
-	  min_ave_memory = 0, max_ave_memory = 180, 
+    max_nodes = 10,
+    min_memory = 0, max_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 180, 
     users = greeneSpecialUsers.cns_wang_users
-   },
+  },
 
-   chem_cpu0 = { min_cpus = 1, max_cpus = 48,
-	  max_nodes = 10,
-	  min_memory = 0, max_memory = 180,
-	  min_ave_memory = 0, max_ave_memory = 180, 
+  chem_cpu0 = { min_cpus = 1, max_cpus = 48,
+    max_nodes = 10,
+    min_memory = 0, max_memory = 180,
+    min_ave_memory = 0, max_ave_memory = 180, 
     users = greeneSpecialUsers.chem_cpu0_users
-   }
+  }
 }
 
 local special_partition_configurations = {
