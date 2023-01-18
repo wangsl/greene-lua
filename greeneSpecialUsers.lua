@@ -39,13 +39,12 @@ greeneSpecialUsers.cds_users = {
 }
 
 greeneSpecialUsers.cilvr_a100_users = {
-  "ac5968", "agc9824", "am10150", "anw2067", "aw130", "aw3272", 
-  "bl1611", "bne215", "dm5182", "eo41", "hh2291", "jb4496", "jc11431", 
-  "lp91", "map22", "mr3182", "nk3351", "nms572", "nxb2314", 
-  "rdf7", "rhr246", "rs4070", "rst306", 
-  "sb6065", "sc1104", "sh6474", "tl876", "wv9", "yl22", "yy2694",
-  "sa5914", "yp883", "as17582", "nm1874", "mag1038", "tm3647",
-  "up2021"
+  "ac5968", "agc9824", "am10150", "anw2067", "apm470", "aw130", "aw3272", 
+  "bl1611", "bne215", "cz1285", "dm5182", "eo41", "hh2291", 
+  "jb4496", "jc11431", "lhz209", "lp91", "map22", "mg3479", "mr3182", "ms7490", 
+  "nal9967", "nhj4247", "nk3351", "nms572", "nxb2314", 
+  "rdf7", "rhr246", "rs4070", "rst306", "sb6065", "sc1104", "sh6474", 
+  "tl876", "wv9", "xh1007", "yl22", "yp883", "yy2694"
 }
 
 greeneSpecialUsers.chem_cpu0_users = {
