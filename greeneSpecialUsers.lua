@@ -44,7 +44,8 @@ greeneSpecialUsers.cilvr_a100_users = {
   "jb4496", "jc11431", "lhz209", "lp91", "map22", "mg3479", "mr3182", "ms7490", 
   "nal9967", "nhj4247", "nk3351", "nms572", "nxb2314", 
   "rdf7", "rhr246", "rs4070", "rst306", "sb6065", "sc1104", "sh6474", 
-  "tl876", "wv9", "xh1007", "yl22", "yp883", "yy2694"
+  "tl876", "wv9", "xh1007", "yl22", "yp883", "yy2694",
+  "ar7420", "ig2283", "zc2357", "up2021"
 }
 
 greeneSpecialUsers.chem_cpu0_users = {
@@ -65,7 +66,11 @@ greeneSpecialUsers.tandon_a100_2_users = { "mr6852",
  "aj3281", "jy3694"
 }
 
-greeneSpecialUsers.chemistry_a100_2_users = { "gmh4", "sx801", "gm2535", "zl3765" }
+greeneSpecialUsers.chemistry_a100_2_users = { 
+  "gmh4", "gm2535", 
+  "zl3765", 
+  "sx801", "tk2801", "cii2002", "ch3859" 
+}
 
 local stakeholders_a100_users = {} 
 stakeholders_a100_users = table_concat(stakeholders_a100_users, greeneSpecialUsers.cds_users)
